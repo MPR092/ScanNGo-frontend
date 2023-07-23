@@ -11,12 +11,16 @@ const Success = ({navigation}) => {
   // const { totalP } = route.params;
 
   // if ( totalP ) {
-    Toast.show({
-      topOffset: 60,
-      type: "success",
-      text1: "Payment Successful",
-      text2: "Shop with us again"
-    })
+
+
+    // Toast.show({
+    //   topOffset: 60,
+    //   type: "success",
+    //   text1: "Payment Successful",
+    //   text2: "Shop with us again"
+    // })
+
+
   // }
 
   const handleContinue = () => {
@@ -32,19 +36,19 @@ const Success = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
     
-      <View style={styles.containerHeader}>
+      {/* <View style={styles.containerHeader}>
         <Text style={styles.title}>ScanNGo</Text>
         <View style={styles.underlineContainer}>
           <View style={styles.underline} />
         </View>
-      </View>
+      </View> */}
 
       <View style={styles.body}>
         {/* <Text style={styles.paid}>$ {JSON.stringify(totalP)}</Text> */}
         <Image
           style={styles.successChild}
           contentFit="cover"
-          source={require("../assets/group-167.png")}
+          source={require("../assets/images/group-167.png")}
         />
         <Text style={styles.thankYou}>{`Thank you for choosing \n Scan N Go`}</Text>
       </View>
@@ -77,12 +81,12 @@ const styles = StyleSheet.create({
     width: 352,
     position: "absolute",
   },
-  scanNGoTypo: {
-    textAlign: "left",
-    fontFamily: FontFamily.latoBlack,
-    fontWeight: "900",
-    position: "absolute",
-  },
+  // scanNGoTypo: {
+  //   textAlign: "left",
+  //   fontFamily: FontFamily.latoBlack,
+  //   fontWeight: "900",
+  //   position: "absolute",
+  // },
   continueLayout: {
     height: 54,
     width: 316,
@@ -165,7 +169,7 @@ const styles = StyleSheet.create({
     // left: 91,
     color: Color.gray,
     textAlign: "center",
-    fontFamily: FontFamily.latoBlack,
+    // fontFamily: FontFamily.latoBlack,
     fontWeight: "900",
     fontSize: FontSize.size_5xl,
     position: "absolute",

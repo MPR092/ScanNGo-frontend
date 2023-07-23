@@ -14,23 +14,23 @@ const WelcomeIcon = () => {
     <ImageBackground
       style={styles.welcomeIcon}
       resizeMode="cover"
-      source={require("../assets/welcome.png")}
+      source={require("../assets/images/welcome.png")}
     >
       <Image
         style={styles.shoppingBagIcon}
         contentFit="cover"
-        source={require("../assets/shoppingbag.png")}
+        source={require("../assets/images/shoppingbag.png")}
       />
       <Image
         style={styles.vectorEffectsIcon}
         contentFit="cover"
-        source={require("../assets/vector-effects.png")}
+        source={require("../assets/images/vector-effects.png")}
       />
       <View style={styles.header}>
         <Image
           style={styles.takeAPhotoIcon}
           contentFit="cover"
-          source={require("../assets/take-a-photo-icon1.png")}
+          source={require("../assets/images/take-a-photo-icon1.png")}
         />
         <Text
           style={styles.logo}

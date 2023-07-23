@@ -57,7 +57,7 @@ const Login = ({navigation}) => {
 
   return (
     <ImageBackground
-      source={require('../My/welcome.png')}
+      source={require('../assets/images/welcome.png')}
       style={styles.backgroundImage}
       resizeMode="cover"
     >

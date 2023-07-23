@@ -2,6 +2,10 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native"; //Navigation Stack
 
+//Redux
+import { Provider } from 'react-redux'
+import store from './Redux/store'
+
 // Toast Beautiful Messages
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 
@@ -26,6 +30,7 @@ export default function App() {
 
   return (
     <>
+      <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Login"
@@ -69,6 +74,7 @@ export default function App() {
       </NavigationContainer>
       <Toast />
       {/* <Toast ref={(ref) => Toast.setRef(ref)} /> */}
+      </Provider>
     </>
   );
 }

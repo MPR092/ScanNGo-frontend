@@ -7,7 +7,7 @@ import {
   StyleSheet,
   ImageBackground,
 } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+// import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 //Icons
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -22,7 +22,7 @@ import { Toast } from "react-native-toast-message/lib/src/Toast";
 import Error from "../Shared/error";
 
 //communication with the server
-import axios from "axios";
+// import axios from "axios";
 import baseURL from '../assets/common/BaseUrl';
 
 
@@ -84,7 +84,7 @@ const Register = ({ navigation }) => {
 
   return (
       <ImageBackground
-        source={require("../My/welcome.png")}
+        source={require("../assets/images/welcome.png")}
         style={styles.backgroundImage}
         resizeMode="cover"
       >

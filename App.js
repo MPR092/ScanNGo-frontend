@@ -67,7 +67,7 @@ export default function App() {
           <Stack.Screen
             name="ShoppingCart"
             component={ShoppingCart}
-            options={{ headerShown: true, title: "Cart" }}
+            options={{ headerShown: true, title: "Cart", headerBackVisible: false , gestureEnabled: false }}
           />
         </Stack.Navigator>
         {/* <StatusBar style="auto" /> */}

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Image } from "expo-image";
 import { StyleSheet, ImageBackground, Text, View } from "react-native";
-import { Button } from "@ui-kitten/components";
+// import { Button } from "@ui-kitten/components";
 import { Color, FontSize, FontFamily, Border } from "../GlobalStyles";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -24,7 +24,7 @@ const Help = () => {
           // resizeMode="cover"
           contentFit="cover"
           // contentFit="absolute"
-          source={require("../assets/scan-componentcodeean13.png")}
+          source={require("../assets/images/scan-componentcodeean13.png")}
         />
         <View style={[styles.codeContainer, styles.logoPosition]}>
           <Text style={[styles.text, styles.textPosition]}>
@@ -38,7 +38,7 @@ const Help = () => {
           style={styles.helpChild}
           contentFit="cover"
           // contentFit="relative"
-          source={require("../assets/group-6872.png")}
+          source={require("../assets/images/group-6872.png")}
         />
       </View>
 

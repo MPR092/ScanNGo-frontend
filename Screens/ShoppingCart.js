@@ -9,7 +9,7 @@ import {
   SafeAreaView,
   FlatList,
 } from "react-native";
-import { Image } from "expo-image";
+// import { Image } from "expo-image";
 // import { Button } from "@ui-kitten/components";
 // import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
 
@@ -103,6 +103,12 @@ const ShoppingCart = ({navigation}) => {
 
   // const rid = generateObjectId();
 
+
+  //handle checkout
+  const handleCheckout = () => {
+    navigation.navigate("Success")
+  }
+
   //for permissions
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -136,13 +142,10 @@ const ShoppingCart = ({navigation}) => {
           },
           ...prevList,
         ];
-        Toast.show({
-              topOffset: 60,
-              type: "success",
-              text1: "Item added to cart",
-            })
       });
+
     // };
+      
       Toast.show({
         topOffset: 60,
         type: "success",
@@ -207,12 +210,12 @@ const ShoppingCart = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.containerHeader}>
+      {/* <View style={styles.containerHeader}>
         <Text style={styles.title}>Cart</Text>
         <View style={styles.underlineContainer}>
           <View style={styles.underline} />
         </View>
-      </View>
+      </View> */}
 
       <View style={styles.body}>
           <View>
@@ -258,7 +261,7 @@ const ShoppingCart = ({navigation}) => {
         
 
 
-        <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate("Success", {Total: totalP})}>
+        <TouchableOpacity style={styles.button2} onPress={() => handleCheckout()}>
           <Text style={styles.buttonText}>Checkout $ {totalP}</Text>
         </TouchableOpacity>
       </View>

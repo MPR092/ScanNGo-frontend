@@ -1,14 +1,17 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Pressable } from 'react-native';
 import Error from '../Shared/error';
 
 //Icons
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 //Toast Beautiful Messages
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 
+//shared
 import isValidEmail from '../Shared/emailValid';
+import { useTogglePasswordVisibility } from '../Shared/Hooks/useTogglePasswordVisibility';
 
 // Context
 // import AuthGlobal from '../Context/store/AuthGlobal';
@@ -22,6 +25,8 @@ const Login = ({navigation}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const { passwordVisibility, rightIcon, handlePasswordVisibility } = useTogglePasswordVisibility();
 
   // useEffect(() => {
   //   if (context.stateUser.isAuthenticated === true) {
@@ -83,16 +88,30 @@ const Login = ({navigation}) => {
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Icon name="lock" size={23} color="white" style={{ alignSelf: 'auto', marginRight: 15, marginLeft: 10, marginBottom: 20, padding: 2 }} />
           <TextInput
-            style={styles.input}
+            style={styles.inputEye}
             placeholder="Password"
             placeholderTextColor="#ffffff"
-            secureTextEntry={true}
+            secureTextEntry={passwordVisibility}
             autoCapitalize="none"
-            id={'password'}
+            id={'password'} 
             value={password}
             onChangeText={(text) => setPassword(text)}
+            
           />
+          <View style={styles.eye}>
+          <Pressable
+                // style={{ width: "100%" }}
+                onPress={handlePasswordVisibility}
+              >
+                <MaterialCommunityIcons
+                  name={rightIcon}
+                  size={20}
+                  color="#ffffff"
+                />
+          </Pressable>
+          </View>
         </View>
+        
 
           <View style={styles.outlinedText}>
             {error ? <Error message={error} /> : null }
@@ -147,6 +166,31 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 20,
     paddingHorizontal: 20,
+    color: '#ffffff',
+    fontSize: 16,
+  },
+  inputEye: {
+    flex: 5,
+    height: 50,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)', // Semi-transparent input field
+    // borderRadius: 10,
+    borderBottomLeftRadius: 10,
+    borderTopLeftRadius: 10,
+    marginBottom: 20,
+    paddingHorizontal: 20,
+    color: '#ffffff',
+    fontSize: 16,
+  },
+  eye: {
+    flex: 1,
+    height: 50,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)', // Semi-transparent input field
+    // borderRadius: 10,
+    borderBottomRightRadius: 10,
+    borderTopRightRadius: 10,
+    marginBottom: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
     color: '#ffffff',
     fontSize: 16,
   },

@@ -4,6 +4,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Pressable,
   StyleSheet,
   ImageBackground,
 } from "react-native";
@@ -11,9 +12,11 @@ import {
 
 //Icons
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-//Validation
+//Validation shared files
 import isValidEmail from '../Shared/emailValid';
+import { useTogglePasswordVisibility } from '../Shared/Hooks/useTogglePasswordVisibility';
 
 //Toast Beautiful Messages
 import { Toast } from "react-native-toast-message/lib/src/Toast";
@@ -33,6 +36,8 @@ const Register = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const { passwordVisibility, rightIcon, handlePasswordVisibility } = useTogglePasswordVisibility();
 
   const handleRegister = () => {
     // event.preventDefault();
@@ -124,15 +129,27 @@ const Register = ({ navigation }) => {
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Icon name="lock" size={23} color="white" style={{ alignSelf: 'auto', marginRight: 13, marginLeft: 10, marginBottom: 20, padding: 3 }} />
             <TextInput
-              style={styles.input}
+              style={styles.inputEye}
               placeholder="Password"
               placeholderTextColor="#ffffff"
-              secureTextEntry={true}
+              secureTextEntry={passwordVisibility}
               autoCapitalize="none"
               id={'password'}
               value={password}
               onChangeText={(text) => setPassword(text)}
             />
+            <View style={styles.eye}>
+          <Pressable
+                // style={{ width: "100%" }}
+                onPress={handlePasswordVisibility}
+              >
+                <MaterialCommunityIcons
+                  name={rightIcon}
+                  size={20}
+                  color="#ffffff"
+                />
+          </Pressable>
+          </View>
             </View>
 
             <View style={styles.outlinedText}>
@@ -194,6 +211,30 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 16,
     // backgroundColor: 'blue',
+  },inputEye: {
+    flex: 5,
+    height: 50,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)', // Semi-transparent input field
+    // borderRadius: 10,
+    borderBottomLeftRadius: 10,
+    borderTopLeftRadius: 10,
+    marginBottom: 20,
+    paddingHorizontal: 20,
+    color: '#ffffff',
+    fontSize: 16,
+  },
+  eye: {
+    flex: 1,
+    height: 50,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)', // Semi-transparent input field
+    // borderRadius: 10,
+    borderBottomRightRadius: 10,
+    borderTopRightRadius: 10,
+    marginBottom: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#ffffff',
+    fontSize: 16,
   },
   logo: {
     fontSize: 40,

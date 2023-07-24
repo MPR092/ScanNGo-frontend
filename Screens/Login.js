@@ -12,6 +12,10 @@ import { Toast } from "react-native-toast-message/lib/src/Toast";
 //shared
 import isValidEmail from '../Shared/emailValid';
 import { useTogglePasswordVisibility } from '../Shared/Hooks/useTogglePasswordVisibility';
+import baseURL from '../assets/common/BaseUrl'
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
 
 // Context
 // import AuthGlobal from '../Context/store/AuthGlobal';
@@ -35,29 +39,77 @@ const Login = ({navigation}) => {
   //   }
   // }, [context.stateUser.isAuthenticated])
 
-  const handleLogin = () => {
-    const user = {
-      email,
-      password
-    }
+  const handleLogin = async () => {
 
+    // try {
 
-    if (email === "" || password === "") {
-      setError("Please fill in the credentials");
-    } else if (!isValidEmail(email)) {
-      setError("Please enter a valid email address");
-    } else {
-      console.log('Success')
-      // loginUser(user, context.dispacth)
-      Toast.show({
-        topOffset: 60,
-        type: "success",
-        text1: "Login successful",
-        text2: "Try to scan barcodes to add them to the cart"
-      })
+      if (email === "" || password === "") {
+        setError("Please fill in the credentials");
+      } else if (!isValidEmail(email)) {
+        setError("Please enter a valid email address");
+      } else {
+        // console.log('Success, No Validation Errors')        
+        // console.log(`Email: ${email}, Password: ${password}`)
+        
+        
+        // Send login request to the API
+        axios.post(`${baseURL}/users/login`, {
+          email,
+          password,
+        }, {
+          "Content-Type": "application/json",
+        })
+        .then((res) => {
+          // console.log("Got a response")
+          // console.log(res.data)
+          // Check if the API response contains the email and JWT token
+          if (res.data.user && res.data.USER && res.data.token) {
+            // Save the JWT token securely in AsyncStorage
+            AsyncStorage.setItem('token', res.data.token);
+          }
+          else  {
+            console.log("Device: Async Storage Error");
+            Toast.show({
+              topOffset: 60,
+              type: "error",
+              text1: "Device: Async Storage Error",
+              text2: "Cannot store user credentials",
+            });
+          }
 
-      navigation.navigate("ShoppingCart")
-    }
+          Toast.show({
+            topOffset: 60,
+            type: "success",
+            text1: "Login successful",
+            text2: `Welcome, ${res.data.USER.name}!`,
+            // text3: "Try to scan barcodes to add them to the cart"
+          })//toast
+
+          navigation.navigate("ShoppingCart")
+
+        })//then
+        .catch(error => {
+          // Handle error response from server
+          
+          if (error.response && error.response.status === 401) {
+            // Invalid credentials, display error message
+            setError('Invalid credentials. Please try again.');
+          }else if (error && error.response.status === 400) {
+            // Invalid credentials, display error message
+            setError(error.response.data);
+            // console.log(error.response.data)
+          } else {
+            // Other errors, display a generic error message
+            setError('An error occurred. Please try again later.');
+          }
+        });
+
+      }
+    // } catch (error) {
+    //   // Handle error
+    //   setError('Something went wrong');
+    // }
+
   };
 
   return (

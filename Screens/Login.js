@@ -66,6 +66,7 @@ const Login = ({navigation}) => {
           if (res.data.user && res.data.USER && res.data.token) {
             // Save the JWT token securely in AsyncStorage
             AsyncStorage.setItem('token', res.data.token);
+            AsyncStorage.setItem('USER', JSON.stringify(res.data.USER));
           }
           else  {
             console.log("Device: Async Storage Error");

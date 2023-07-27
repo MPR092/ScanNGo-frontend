@@ -5,6 +5,9 @@ import { FontFamily, Color, FontSize } from "../GlobalStyles";
 
 //Icons
 import Icon from "react-native-vector-icons/FontAwesome";
+// import { Avatar } from "@react-native-material/core";
+// import Icon1 from "@expo/vector-icons/MaterialCommunityIcons";
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const UserProfile = () => {
   // Sample user data
@@ -17,12 +20,8 @@ const UserProfile = () => {
   return (
     <SafeAreaView style={styles.container}>
       {/* Profile Icon */}
-      <Icon
-        name="faCircleUser"
-        size={36}
-        color="#6342E8"
-        style={styles.profileIcon}
-      />
+      <FontAwesome5 name="user-circle" size={50} style={styles.profileIcon} color="#6342E8" />
+      <Text style={styles.profileIconText} >User Profile</Text>
 
       {/* User Name */}
       <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -61,50 +60,131 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    // paddingHorizontal: 20, // Add some horizontal padding for better spacing
   },
   profileIcon: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    fontSize: 50,
+    color: "#6342E8", // Assuming this is the profile icon color
+    marginBottom: 10,
+  },
+  profileIconText: {
+    fontSize: 30,
     marginBottom: 20,
   },
   userIcon: {
-    width: 100,
-    height: 100,
-    // borderRadius: 50,
-    marginBottom: 20,
+    flex: 2,
+    textAlign: "center",
+    // alignSelf: 'flex-end',
+    // marginRight: 10, // Add some space between icon and text
   },
   emailIcon: {
-    width: 100,
-    height: 100,
-    // borderRadius: 50,
-    marginBottom: 20,
+    flex: 2,
+    textAlign: "center",
+    // marginRight: 10, // Add some space between icon and text
   },
   userName: {
-    // fontSize: FontSize.size_l,
+    flex: 5,
+    textAlign: "center", // Align text to the right
     fontWeight: "bold",
-    marginBottom: 10,
+    // flex: 1, // Allow the text to expand to the right
   },
   userEmail: {
-    // fontSize: FontSize.size_m,
-    color: Color.darkgray,
-    marginBottom: 20,
+    flex: 5, // Allow the text to expand to the right
+    textAlign: "center", // Align text to the right
+    // fontSize: FontSize.size_m, // If FontSize.size_m is defined elsewhere, you can uncomment this line
+    // color: Color.darkgray, // If Color.darkgray is defined elsewhere, you can uncomment this line
+    // marginBottom: 20,
   },
   creditCardContainer: {
-    backgroundColor: Color.gray,
-    padding: 15,
+    flexDirection: "row", // Display label and number side by side
+    justifyContent: "flex-end", // Align the whole credit card section to the right
+    alignItems: "center", // Align items to the center vertically
+    marginTop: 20, // Add some space between the sections
+    backgroundColor: "grey",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
     borderRadius: 10,
-    width: "80%",
-    alignItems: "center",
+    width: "60%",
   },
   creditCardLabel: {
-    // fontSize: FontSize.size_s,
+    marginRight: 10, // Add some space between label and number
     fontWeight: "bold",
-    marginBottom: 5,
+    // fontSize: FontSize.size_s, // If FontSize.size_s is defined elsewhere, you can uncomment this line
+    // marginBottom: 5,
   },
   creditCardNumber: {
-    // fontSize: FontSize.size_m,
+    textAlign: "right", // Align text to the right
+    // fontSize: FontSize.size_m, // If FontSize.size_m is defined elsewhere, you can uncomment this line
   },
 });
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     // backgroundColor: 'blue',
+//     justifyContent: "center",
+//     alignItems: "center",
+//   },
+//   profileIcon: {
+//     fontSize: 30,
+//     // width: 100,
+//     // height: 100,
+//     // borderRadius: 50,
+//     // marginBottom: 20,
+//   },
+//   profileIcon: {
+//     // size: '56'
+//     // fontSize: 30,
+//     // width: 100,
+//     // height: 100,
+//     // borderRadius: 50,
+//     // marginBottom: 20,
+//   },
+//   profileIconText: {
+//     fontSize: 30,
+//     // width: 100,
+//     // height: 100,
+//     // borderRadius: 50,
+//     // marginBottom: 20,
+//   },
+//   userIcon: {
+//     // width: 100,
+//     // height: 100,
+//     // borderRadius: 50,
+//     // marginBottom: 20,
+//   },
+//   emailIcon: {
+//     alignSelf: 'stretch',
+//     // width: 100,
+//     // height: 100,
+//     // borderRadius: 50,
+//     // marginBottom: 20,
+//   },
+//   userName: {
+//     // fontSize: FontSize.size_l,
+//     fontWeight: "bold",
+//     // marginBottom: 10,
+//   },
+//   userEmail: {
+//     // fontSize: FontSize.size_m,
+//     // color: Color.darkgray,
+//     // marginBottom: 20,
+//   },
+//   creditCardContainer: {
+//     // flex: 0,
+//     backgroundColor: 'grey',
+//     // padding: 15,
+//     borderRadius: 10,
+//     width: "60%",
+//     alignItems: "center",
+//   },
+//   creditCardLabel: {
+//     // fontSize: FontSize.size_s,
+//     fontWeight: "bold",
+//     // marginBottom: 5,
+//   },
+//   creditCardNumber: {
+//     // fontSize: FontSize.size_m,
+//   },
+// });
 
 export default UserProfile;

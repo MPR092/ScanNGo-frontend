@@ -247,15 +247,15 @@ const ShoppingCart = ({navigation}) => {
         </View>
       </Modal> */}
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => setScanned(false)}>
           {/* <Text style={styles.buttonText}>Scan</Text> */}
-          <Button style={styles.button} title={'Tap to Scan'} />
+          {/* <Button style={styles.button} title={'Tap to Scan'} /> */}
           <BarCodeScanner
               onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-              style={[StyleSheet.absoluteFillObject, styles.scanner]}
+              style={[ StyleSheet.absoluteFillObject ]}
               barCodeTypes={[BarCodeScanner.Constants.BarCodeType.ean13, BarCodeScanner.Constants.BarCodeType.ean8, BarCodeScanner.Constants.BarCodeType.codabar , BarCodeScanner.Constants.BarCodeType.code39, BarCodeScanner.Constants.BarCodeType.code93, BarCodeScanner.Constants.BarCodeType.code128]}
             />
-            {scanned && <Button style={styles.button} title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+            {scanned && <Button style={StyleSheet.absoluteFillObject} title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
         </TouchableOpacity>
       
         
@@ -299,15 +299,19 @@ const styles = StyleSheet.create({
   footer: {
     flex: 1,
     // padding: 60,
-    // margin: 50
+    marginTop: 5
   },
   button: {
     flex: 1,
-    backgroundColor: "#6342E8",
+    // backgroundColor: "#6342E8",
     borderRadius: 15,
-    paddingVertical: 12,
-    padding: 10,
     margin: 10,
+    // alignItems: 'center',
+    justifyContent: 'center',
+    // textAlign: 'center',
+    overflow: 'hidden',
+    // paddingVertical: 12,
+    // padding: 10,
   },
   button2: {
     flex: 0,

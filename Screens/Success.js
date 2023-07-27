@@ -3,6 +3,8 @@ import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable, SafeAreaView, TouchableOpacity } from "react-native";
 import { FontFamily, Color, FontSize, Border } from "../GlobalStyles";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 //Toast Beautiful Messages
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 
@@ -23,15 +25,51 @@ const Success = ({navigation}) => {
 
   // }
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     // event.preventDefault();
+    const USER = JSON.parse(await AsyncStorage.getItem('USER'));
     Toast.show({
       topOffset: 60,
       type: "success",
-      text1: "Logout Successful",
-      text2: "Try to login again"
+      text1: `Welcome Back, ${USER.name}!`,
+      text2: "Try to scan the barcodes with the scanner"
     })
+
+    // console.log(`USER: ${USER}`);
+    // Toast.show({
+    //   topOffset: 60,
+    //   type: "success",
+    //   text1: "Login successful",
+    //   text2: `Welcome, ${res.data.USER.name}!`,
+    //   // text3: "Try to scan barcodes to add them to the cart"
+    // })//toast
+
+    navigation.navigate("ShoppingCart")
   }
+
+  const handleLogout = async () => {
+    // event.preventDefault();
+    try {
+      // Clear AsyncStorage data here
+      await AsyncStorage.clear();
+      Toast.show({
+        topOffset: 60,
+        type: "success",
+        text1: "Logout Successful",
+        text2: "Thank you for choosing ScanNGo"
+      })
+ 
+      // Additional logout logic ( navigating to the login screen)
+      navigation.navigate("Login")
+
+    } catch (error) {
+      // Handle error if necessary
+      console.log('Error while logging out:', error);
+    }
+
+  }
+
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -54,8 +92,12 @@ const Success = ({navigation}) => {
       </View>
       
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.button2} onPress={() => { navigation.navigate("Login"); handleContinue()} }>
+        <TouchableOpacity style={styles.button2} onPress={() => { handleContinue()} }>
           <Text style={styles.buttonText}>Continue shopping</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button2} onPress={() => { handleLogout()} }>
+          <Text style={styles.buttonText}>Logout</Text>
         </TouchableOpacity>
       </View>
       

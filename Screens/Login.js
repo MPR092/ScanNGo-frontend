@@ -14,6 +14,9 @@ import isValidEmail from '../Shared/emailValid';
 import { useTogglePasswordVisibility } from '../Shared/Hooks/useTogglePasswordVisibility';
 import baseURL from '../assets/common/BaseUrl'
 
+//Bottom Tab Navigator
+import Main from "../Navigators/main";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 
@@ -86,7 +89,8 @@ const Login = ({navigation}) => {
             // text3: "Try to scan barcodes to add them to the cart"
           })//toast
 
-          navigation.navigate("ShoppingCart")
+          // navigation.navigate("ShoppingCart")
+          navigation.navigate("Main")
 
         })//then
         .catch(error => {

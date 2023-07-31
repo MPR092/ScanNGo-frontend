@@ -44,7 +44,7 @@ const Success = ({navigation}) => {
     //   // text3: "Try to scan barcodes to add them to the cart"
     // })//toast
 
-    navigation.navigate("ShoppingCart")
+    navigation.navigate("Main")
   }
 
   const handleLogout = async () => {

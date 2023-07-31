@@ -1,7 +1,11 @@
-import * as React from "react";
+// import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { FontFamily, Color, FontSize } from "../GlobalStyles";
+
+//access user data stored before
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //Icons
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -10,12 +14,37 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { FontAwesome5 } from '@expo/vector-icons';
 
 const UserProfile = () => {
+  const [USER, setUSER] = useState(null);
+
   // Sample user data
   const userData = {
     name: "John Doe",
     email: "john.doe@example.com",
     creditCard: "**** **** **** 1234",
   };
+
+  useEffect(() => {
+    // Fetch user data from AsyncStorage
+    const fetchUSERData = async () => {
+      try {
+        const user = JSON.parse(await AsyncStorage.getItem('USER'));
+        setUSER(user);
+      } catch (error) {
+        console.error("Error fetching user data: ", error);
+      }
+    };
+
+    fetchUSERData();
+  }, []);
+
+  // Show loading or error message while fetching data
+  if (userData === null) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text>Loading...</Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -24,6 +53,7 @@ const UserProfile = () => {
       <Text style={styles.profileIconText} >User Profile</Text>
 
       {/* User Name */}
+      {USER?.name && ( // Check if USER.name is available
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Icon
           name="user"
@@ -31,10 +61,13 @@ const UserProfile = () => {
           color="#6342E8"
           style={styles.userIcon}
         />
-        <Text style={styles.userName}>{userData.name}</Text>
+        {/* <Text style={styles.userName}>{userData.name}</Text> */}
+        <Text style={styles.userName}>{USER.name}</Text>
       </View>
+      )}
 
       {/* User Email */}
+      {USER?.email && ( // Check if USER.email is available
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Icon
           name="envelope"
@@ -42,8 +75,10 @@ const UserProfile = () => {
           color="#6342E8"
           style={styles.emailIcon}
         />
-        <Text style={styles.userEmail}>{userData.email}</Text>
+        {/* <Text style={styles.userEmail}>{userData.email}</Text> */}
+        <Text style={styles.userEmail}>{USER.email}</Text>
       </View>
+      )}
 
       {/* Credit Card Details */}
       <View style={styles.creditCardContainer}>

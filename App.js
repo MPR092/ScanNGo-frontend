@@ -37,10 +37,9 @@ export default function App() {
     <>
       <Provider store={store}>
         <Stacks/>
-        {/* <NavigationContainer> */}
-        {/* <Main/> */}
+        
         {/* <StatusBar style="auto" /> */}
-        {/* </NavigationContainer> */}
+        
       <Toast />
       {/* <Toast ref={(ref) => Toast.setRef(ref)} /> */}
       </Provider>

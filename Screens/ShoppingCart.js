@@ -18,10 +18,6 @@ import baseURL from "../assets/common/BaseUrl";
 import { connect } from "react-redux";
 import * as actions from "../Redux/Actions/cartActions";
 
-// import { Image } from "expo-image";
-// import { Button } from "@ui-kitten/components";
-// import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
-
 //Toast Beautiful Messages
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 
@@ -32,8 +28,6 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 const ShoppingCart = (props) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-
-  const [total, setTotal] = useState("");
 
   //handle checkout
   const handleCheckout = () => {
@@ -123,12 +117,10 @@ const ShoppingCart = (props) => {
     return <Text>No access to camera</Text>;
   }
 
-  let sumOfPrices = 0;
-  // sumOfPrices = props.cartItems.map(data => data.price).reduce((acc, amount) => acc + amount);
-
-  // let totalP = sumOfPrices.toFixed(2)
-
   var totalP = 0;
+  props.cartItems.forEach(cart => {
+    return (totalP += cart.product.price)
+  });
 
   //rendering data
   const renderItem = ({ item }) => (
@@ -233,7 +225,7 @@ const ShoppingCart = (props) => {
 
           <View style={styles.itemTotal}>
             {/* <Text style={styles.textTotal}>Total: $ {totalP}</Text> */}
-            <Text style={styles.textTotal}>Total: $224.86</Text>
+            <Text style={styles.textTotal}>Total: $ {totalP}</Text>
           </View>
         </View>
 
@@ -242,7 +234,7 @@ const ShoppingCart = (props) => {
           onPress={() => handleCheckout()}
         >
           {/* <Text style={styles.buttonText}>Checkout $ {totalP}</Text> */}
-          <Text style={styles.buttonText}>Checkout $ {totalP}</Text>
+          <Text style={styles.buttonText}>Checkout (${totalP})</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

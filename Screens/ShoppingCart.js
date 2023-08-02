@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { useState, useEffect } from "react";
 import {
   StyleSheet,
@@ -9,6 +9,15 @@ import {
   SafeAreaView,
   FlatList,
 } from "react-native";
+
+//database
+import axios from "axios"; // Import Axios to make API requests
+import baseURL from "../assets/common/BaseUrl";
+
+//Cart State
+import { connect } from "react-redux";
+import * as actions from "../Redux/Actions/cartActions";
+
 // import { Image } from "expo-image";
 // import { Button } from "@ui-kitten/components";
 // import { Color, FontFamily, FontSize, Border } from "../GlobalStyles";
@@ -17,103 +26,25 @@ import {
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 
 // For Barcode Scan
-import { Button, Modal } from 'react-native';
-import { BarCodeScanner } from 'expo-barcode-scanner';
+import { Button, Modal } from "react-native";
+import { BarCodeScanner } from "expo-barcode-scanner";
 
-//random object id
-// import { ObjectID } from 'bson';
-
-const ShoppingCart = ({navigation}) => {
+const ShoppingCart = (props) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
 
-  const [total, setTotal] = useState('');
-
-  const [mydata, setmyData] = useState([
-    {
-      _id: "6493137939750bdbfdce02f5",
-      upc: 101920902039,
-      name: "Powerade Fruit Punch",
-      price: 3.25,
-      MultiDiscountQty: 2,
-      MultiDiscountPrice: 5,
-      __v: 0,
-      id: "6493137939750bdbfdce02f5",
-    },
-    {
-      MultiDiscountQty: 1,
-      MultiDiscountPrice: 1,
-      _id: "6493b8ee11a43dbefcab0405",
-      upc: 101920902038,
-      name: "Powerade Blueberry",
-      price: 3.25,
-      __v: 0,
-      id: "6493b8ee11a43dbefcab0405",
-    },
-    {
-      MultiDiscountQty: 1,
-      MultiDiscountPrice: 1,
-      _id: "6493c9946eee2742b0306597",
-      upc: 101920902037,
-      name: "Powerade Orange",
-      price: 3.25,
-      __v: 0,
-      id: "6493c9946eee2742b0306597",
-    },
-    {
-      MultiDiscountQty: 1,
-      MultiDiscountPrice: 1,
-      _id: "6494a06057830be1f97e5f05",
-      upc: 101920902037,
-      name: "Powerade Grape Blast",
-      price: 3.25,
-      __v: 0,
-      id: "6494a06057830be1f97e5f05",
-    },
-    {
-      _id: "64962734be0df7eea1b3febc",
-      upc: 22333171721,
-      name: "Proctor Silex Iron",
-      price: 79.99,
-      MultiDiscountQty: 1,
-      MultiDiscountPrice: 1,
-      __v: 0,
-      id: "64962734be0df7eea1b3febc",
-    },
-    {
-      _id: "649727d8a368763089bd4e12",
-      upc: 39800011329,
-      name: "Energizer AA4",
-      price: 12.47,
-      MultiDiscountQty: 1,
-      MultiDiscountPrice: 1,
-      __v: 0,
-      id: "649727d8a368763089bd4e12",
-    }
-  ]);
-
-  // const [mydata, setmyData] = useState('');
-
-  // function generateObjectId() {
-  //   const timestamp = Math.floor(new Date().getTime() / 1000).toString(16);
-  //   const randomValue = Math.floor(Math.random() * 16777215).toString(16);
-  //   const objectId = timestamp + '0'.repeat(8 - timestamp.length) + randomValue;
-  //   return new ObjectID(objectId);
-  // }
-
-  // const rid = generateObjectId();
-
+  // const [total, setTotal] = useState("");
 
   //handle checkout
   const handleCheckout = () => {
-    navigation.navigate("Success")
-  }
+    props.navigation.navigate("Success");
+  };
 
   //for permissions
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
+      setHasPermission(status === "granted");
     };
 
     getBarCodeScannerPermissions();
@@ -124,33 +55,67 @@ const ShoppingCart = ({navigation}) => {
     setScanned(true);
     const upc = parseInt(data, 10);
 
-    // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-    // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-    // let handleAdd = (text) => {
-    // let handleAdd = (text) => {
-    setmyData((prevList) => {
-        return [
-          {
-            _id: Math.random(),
-            upc: upc,
-            name: "Unknown Product",
-            price: Math.floor(Math.random() * 99) + 1,
-            MultiDiscountQty: 1,
-            MultiDiscountPrice: 1,
-            __v: 0,
-            id: Math.random(),
-          },
-          ...prevList,
-        ];
-      });
+    // console.log("UPC: ", upc);
 
-    // };
-      
-      Toast.show({
-        topOffset: 60,
-        type: "success",
-        text1: "Item Added to the cart"
-      })
+    // Send the UPC data request to the API
+    //search for upc in database
+    if (upc) {
+      axios
+        .get(`${baseURL}/products/search/${upc}`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          // console.log(res.data);
+          // Handle the response from the API
+          if (res.data.success === false) {
+            // Item not found, show error message to the user
+            console.log(res.data.message);
+            Toast.show({
+              topOffset: 60,
+              type: "info",
+              text1: `Product not found`,
+            });
+          } else {
+            // Item found, handle the data for the found item
+            if (res.data.product) {
+              const productDataFromAPI = res.data.product;
+              // Do something with the product data
+              console.log("Product found:", productDataFromAPI);
+
+              // add to redux store
+              props.addItemToCart(productDataFromAPI);
+
+              Toast.show({
+                topOffset: 60,
+                type: "success",
+                text1: "Item Added to the cart",
+              });
+            }
+          }
+        })
+        .catch((error) => {
+          // Handle API error
+          if (error.response && error.response.status === 404) {
+            // Invalid upc, display error message
+            console.log("UPC: ", upc, "|", error.response.data.message);
+            Toast.show({
+              topOffset: 60,
+              type: "info",
+              text1: `${error.response.data.message}`,
+            });
+          }else if (error && error.response.status === 500) {
+            // Server not connected
+            console.log("Server Error: ",error.response.data)
+          } else {
+            // Other errors, display a generic error message
+            console.log('An error occurred', error);
+          }
+
+        });
+    }
+
   };
 
   if (hasPermission === null) {
@@ -160,108 +125,104 @@ const ShoppingCart = ({navigation}) => {
     return <Text>No access to camera</Text>;
   }
 
-  //Modal Control
-  // const [modalVisible, setModalVisible] = useState(false);
+  // let sumOfPrices = 0;
+  // sumOfPrices = mydata.map(data => data.price).reduce((acc, amount) => acc + amount);
 
-  // const handleButtonClick = () => {
-  //   setModalVisible(true);
-  // };
+  // let totalP = sumOfPrices.toFixed(2)
 
-  // const handleCloseModal = () => {
-  //   setModalVisible(false);
-  // };
-
-  //for total
-  // if (myData !== null)
-  // {
-    let sumOfPrices = 0;
-    sumOfPrices = mydata.map(data => data.price).reduce((acc, amount) => acc + amount);
-  
-    let totalP = sumOfPrices.toFixed(2)
-  // } else {
-  //   totalP = 0;
-  // }    
-
+  var totalP = 0;
 
   //rendering data
   const renderItem = ({ item }) => (
     <View style={styles.data}>
-
       <View style={styles.itemContainer}>
+        <View style={{ flex: 1, flexDirection: "row" }}>
+          <View style={styles.item1}>
+            <Text style={styles.textName}>{item.product.name}</Text>
+            <Text style={styles.textUpc}>{item.product.upc}</Text>
+          </View>
 
-      <View style={{ flex:1, flexDirection: 'row'}}>
-        <View style={styles.item1}>
-          <Text style={styles.textName}>{item.name}</Text>
-          <Text style={styles.textUpc}>{item.upc}</Text>
-        </View>
+          <View style={styles.itemQty}>
+            <Text style={styles.textQty}>Qty: 1</Text>
+          </View>
 
-        <View style={styles.itemQty}>
-          <Text style={styles.textQty}>Qty: 1</Text>
+          <View style={styles.item3}>
+            <Text style={styles.textPrice}>$ {item.product.price}</Text>
+          </View>
         </View>
-
-        <View style={styles.item3}>
-          <Text style={styles.textPrice}>$ {item.price}</Text>
-        </View>
-      
-      </View>
       </View>
     </View>
   );
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <View style={styles.containerHeader}>
-        <Text style={styles.title}>Cart</Text>
-        <View style={styles.underlineContainer}>
-          <View style={styles.underline} />
-        </View>
-      </View> */}
-
       <View style={styles.body}>
-          <View>
-          <FlatList
-            legacyImplementation="true"
-            data={mydata}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderItem}
-          />
-          </View>
-
+        <View style={styles.ListContainer}>
+          {props.cartItems.length ? (
+            <>
+              <View style={{ flex: 1, flexDirection: "row", paddingVertical: 10, backgroundColor: "#D3D3D3" }}>
+                <FlatList
+                  legacyImplementation="true"
+                  data={props.cartItems}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={renderItem}
+                />
+              </View>
+              <View>
+                <Text></Text>
+              </View>
+            </>
+          ) : (
+            <>
+              <View style={styles.ListEmpty}>
+                <Text style={styles.textPrice}>Your Cart is Empty</Text>
+                <Text style={styles.textPrice}>
+                  Scan the items to add it to your Cart
+                </Text>
+              </View>
+            </>
+          )}
+        </View>
       </View>
 
       <View style={styles.footer}>
-        
         <View style={styles.itemTotal}>
-          <Text style={styles.textTotal}>Total: $ {totalP}</Text>
+          {/* <Text style={styles.textTotal}>Total: $ {totalP}</Text> */}
+          <Text style={styles.textTotal}>Total 224.86</Text>
         </View>
-    {/*Total 224.86 */}
-      {/* <Modal visible={modalVisible} animationType="slide" transparent={true}>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <View style={{ backgroundColor: 'white', padding: 20 }}>
-            <Text>Scan The Barcodes</Text>
-            
-            <TouchableOpacity onPress={handleCloseModal}>
-              <Text style={{ backgroundColor: 'red', color: 'white', padding: 10 }}>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal> */}
 
-        <TouchableOpacity style={styles.button} onPress={() => setScanned(false)}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setScanned(false)}
+        >
           {/* <Text style={styles.buttonText}>Scan</Text> */}
           {/* <Button style={styles.button} title={'Tap to Scan'} /> */}
           <BarCodeScanner
-              onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-              style={[ StyleSheet.absoluteFillObject ]}
-              barCodeTypes={[BarCodeScanner.Constants.BarCodeType.ean13, BarCodeScanner.Constants.BarCodeType.ean8, BarCodeScanner.Constants.BarCodeType.codabar , BarCodeScanner.Constants.BarCodeType.code39, BarCodeScanner.Constants.BarCodeType.code93, BarCodeScanner.Constants.BarCodeType.code128]}
+            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            style={[StyleSheet.absoluteFillObject]}
+            barCodeTypes={[
+              BarCodeScanner.Constants.BarCodeType.ean13,
+              BarCodeScanner.Constants.BarCodeType.ean8,
+              BarCodeScanner.Constants.BarCodeType.codabar,
+              BarCodeScanner.Constants.BarCodeType.code39,
+              BarCodeScanner.Constants.BarCodeType.code93,
+              BarCodeScanner.Constants.BarCodeType.code128,
+            ]}
+          />
+          {scanned && (
+            <Button
+              style={StyleSheet.absoluteFillObject}
+              title={"Tap to Scan Again"}
+              onPress={() => setScanned(false)}
             />
-            {scanned && <Button style={StyleSheet.absoluteFillObject} title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+          )}
         </TouchableOpacity>
-      
-        
 
-
-        <TouchableOpacity style={styles.button2} onPress={() => handleCheckout()}>
+        <TouchableOpacity
+          style={styles.button2}
+          onPress={() => handleCheckout()}
+        >
+          {/* <Text style={styles.buttonText}>Checkout $ {totalP}</Text> */}
           <Text style={styles.buttonText}>Checkout $ {totalP}</Text>
         </TouchableOpacity>
       </View>
@@ -280,14 +241,15 @@ const styles = StyleSheet.create({
   },
   itembox: {
     // color: 'blue',
-    backgroundColor: 'red',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
+    backgroundColor: "red",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   container: {
     flex: 1,
     justifyContent: "center",
+    // backgroundColor: 'blue'
   },
   header: {
     flex: 1,
@@ -299,7 +261,7 @@ const styles = StyleSheet.create({
   footer: {
     flex: 1,
     // padding: 60,
-    marginTop: 5
+    marginTop: 5,
   },
   button: {
     flex: 1,
@@ -307,9 +269,9 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     margin: 10,
     // alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: "center",
     // textAlign: 'center',
-    overflow: 'hidden',
+    overflow: "hidden",
     // paddingVertical: 12,
     // padding: 10,
   },
@@ -344,14 +306,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   data: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: 5,
-    // padding: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    // flex:1,
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: 5,
+    marginTop: 10,
+    paddingHorizontal: 5,
+    // paddingVertical: 5,
+    flex: 1,
     flexDirection: "row",
+    // backgroundColor: 'blue',
   },
   textName: {
     color: "#6342E8",
@@ -360,61 +323,101 @@ const styles = StyleSheet.create({
     color: "#000000",
   },
   item1: {
-    flex:2,
-    alignSelf: 'left',
-    padding: 10
+    flex: 2,
+    alignSelf: "left",
+    padding: 10,
   },
   textUpc: {
     color: "grey",
   },
   item2: {
-    flex:2,
-    alignSelf: 'left',
-    padding: 10
+    flex: 2,
+    alignSelf: "left",
+    padding: 10,
   },
   textPrice: {
-    textAlign: 'center',
+    textAlign: "center",
     color: "black",
     fontSize: 20,
-    fontWeight: '500'
+    fontWeight: "500",
   },
   item3: {
-    flex:1,
+    flex: 1,
     // flexDirection: 'column',
     // backgroundColor: 'red',
-    alignSelf: 'center',
-    justifyContent: 'flex-end'
+    alignSelf: "center",
+    justifyContent: "flex-end",
     // padding: 10
   },
-  itemQty:{
-    flex:1,
-    alignSelf: 'flex-end',
-    paddingBottom: 7
+  itemQty: {
+    flex: 1,
+    alignSelf: "flex-end",
+    paddingBottom: 7,
   },
   itemContainer: {
     flex: 1,
-    backgroundColor: '#D3D3D3',
+    // backgroundColor: "#D3D3D3",
+    backgroundColor: 'white',
     borderRadius: 5,
-    alignItems: 'center'
+    alignItems: "center",
   },
   itemTotal: {
     left: 100,
-    alignItems: 'center',
-    justifyContent:"center",
+    alignItems: "center",
+    justifyContent: "center",
     // paddingRight: 20,
   },
   textTotal: {
-    textAlign: 'center',
+    textAlign: "center",
     color: "black",
     fontSize: 20,
-    fontWeight: 'bold'
+    fontWeight: "bold",
   },
   scanner: {
     borderRadius: 15,
-    borderColor: 'white',
+    borderColor: "white",
     borderWidth: 2,
     // display: 'block',
-  }
+  },
+  List: {
+    flex: 1,
+    backgroundColor: "#D3D3D3",
+    textAlign: "center",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  ListContainer: {
+    flex: 1,
+    // backgroundColor: "#D3D3D3",
+    textAlign: "center",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  ListEmpty: {
+    flex: 1,
+    // padding: 5,
+    backgroundColor: "#D3D3D3",
+    textAlign: "center",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
 
-export default ShoppingCart;
+// Map Redux state to component props
+const mapStateToProps = (state) => {
+  const { cartItems } = state;
+  return {
+    cartItems: cartItems,
+  };
+};
+
+// Map dispatch actions to component props
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addItemToCart: (product) =>
+      dispatch(actions.addToCart({ quantity: 1, product })),
+  };
+};
+
+// Connect the component to the Redux store
+export default connect(mapStateToProps, mapDispatchToProps)(ShoppingCart);

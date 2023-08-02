@@ -33,7 +33,7 @@ const ShoppingCart = (props) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
 
-  // const [total, setTotal] = useState("");
+  const [total, setTotal] = useState("");
 
   //handle checkout
   const handleCheckout = () => {
@@ -105,17 +105,15 @@ const ShoppingCart = (props) => {
               type: "info",
               text1: `${error.response.data.message}`,
             });
-          }else if (error && error.response.status === 500) {
+          } else if (error && error.response.status === 500) {
             // Server not connected
-            console.log("Server Error: ",error.response.data)
+            console.log("Server Error: ", error.response.data);
           } else {
             // Other errors, display a generic error message
-            console.log('An error occurred', error);
+            console.log("An error occurred", error);
           }
-
         });
     }
-
   };
 
   if (hasPermission === null) {
@@ -125,8 +123,8 @@ const ShoppingCart = (props) => {
     return <Text>No access to camera</Text>;
   }
 
-  // let sumOfPrices = 0;
-  // sumOfPrices = mydata.map(data => data.price).reduce((acc, amount) => acc + amount);
+  let sumOfPrices = 0;
+  // sumOfPrices = props.cartItems.map(data => data.price).reduce((acc, amount) => acc + amount);
 
   // let totalP = sumOfPrices.toFixed(2)
 
@@ -136,7 +134,7 @@ const ShoppingCart = (props) => {
   const renderItem = ({ item }) => (
     <View style={styles.data}>
       <View style={styles.itemContainer}>
-        <View style={{ flex: 1, flexDirection: "row" }}>
+        <View style={{ flex: 1, flexDirection: "row", elevation: 20 }}>
           <View style={styles.item1}>
             <Text style={styles.textName}>{item.product.name}</Text>
             <Text style={styles.textUpc}>{item.product.upc}</Text>
@@ -160,7 +158,14 @@ const ShoppingCart = (props) => {
         <View style={styles.ListContainer}>
           {props.cartItems.length ? (
             <>
-              <View style={{ flex: 1, flexDirection: "row", paddingVertical: 10, backgroundColor: "#D3D3D3" }}>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  paddingVertical: 10,
+                  backgroundColor: "#D3D3D3",
+                }}
+              >
                 <FlatList
                   legacyImplementation="true"
                   data={props.cartItems}
@@ -357,7 +362,7 @@ const styles = StyleSheet.create({
   itemContainer: {
     flex: 1,
     // backgroundColor: "#D3D3D3",
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 5,
     alignItems: "center",
   },

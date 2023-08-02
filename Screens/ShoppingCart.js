@@ -154,48 +154,7 @@ const ShoppingCart = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.body}>
-        <View style={styles.ListContainer}>
-          {props.cartItems.length ? (
-            <>
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  paddingVertical: 10,
-                  backgroundColor: "#D3D3D3",
-                }}
-              >
-                <FlatList
-                  legacyImplementation="true"
-                  data={props.cartItems}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={renderItem}
-                />
-              </View>
-              <View>
-                <Text></Text>
-              </View>
-            </>
-          ) : (
-            <>
-              <View style={styles.ListEmpty}>
-                <Text style={styles.textPrice}>Your Cart is Empty</Text>
-                <Text style={styles.textPrice}>
-                  Scan the items to add it to your Cart
-                </Text>
-              </View>
-            </>
-          )}
-        </View>
-      </View>
-
-      <View style={styles.footer}>
-        <View style={styles.itemTotal}>
-          {/* <Text style={styles.textTotal}>Total: $ {totalP}</Text> */}
-          <Text style={styles.textTotal}>Total 224.86</Text>
-        </View>
-
+      <View style={styles.scannerContainer}>
         <TouchableOpacity
           style={styles.button}
           onPress={() => setScanned(false)}
@@ -222,6 +181,61 @@ const ShoppingCart = (props) => {
             />
           )}
         </TouchableOpacity>
+      </View>
+
+      <View style={styles.body}>
+        <View style={styles.ListContainer}>
+          {props.cartItems.length ? (
+            <>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  paddingVertical: 10,
+                  // backgroundColor: "#D3D3D3",
+                  backgroundColor: "#b5babd",
+                }}
+              >
+                <FlatList
+                  legacyImplementation="true"
+                  data={props.cartItems}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={renderItem}
+                />
+              </View>
+            </>
+          ) : (
+            <>
+              <View style={styles.ListEmpty}>
+                <Text style={styles.textPrice}>Your Cart is Empty</Text>
+                <Text style={styles.textPrice}>
+                  Scan the items to add it to your Cart
+                </Text>
+              </View>
+            </>
+          )}
+        </View>
+      </View>
+
+      <View style={styles.footer}>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            paddingHorizontal: 10,
+          }}
+        >
+          <TouchableOpacity style={styles.clearCart}>
+            <Text style={styles.clearCartText}>Clear Cart</Text>
+          </TouchableOpacity>
+
+          <View style={styles.itemTotal}>
+            {/* <Text style={styles.textTotal}>Total: $ {totalP}</Text> */}
+            <Text style={styles.textTotal}>Total: $224.86</Text>
+          </View>
+        </View>
 
         <TouchableOpacity
           style={styles.button2}
@@ -256,11 +270,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     // backgroundColor: 'blue'
   },
+  scannerContainer: {
+    flex: 1,
+    backgroundColor: '#b5babd'
+  },
   header: {
     flex: 1,
   },
   body: {
-    flex: 2,
+    flex: 5,
     // backgroundColor: 'blue'
   },
   footer: {
@@ -272,7 +290,8 @@ const styles = StyleSheet.create({
     flex: 1,
     // backgroundColor: "#6342E8",
     borderRadius: 15,
-    margin: 10,
+    marginHorizontal: 10,
+    marginTop: 10,
     // alignItems: 'center',
     justifyContent: "center",
     // textAlign: 'center',
@@ -367,10 +386,37 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   itemTotal: {
-    left: 100,
+    flex: 1,
+    // left: 100,
     alignItems: "center",
     justifyContent: "center",
     // paddingRight: 20,
+  },
+  clearCart: {
+    flex: 0.5,
+    // left: 100,
+    alignSelf: "stretch",
+    // alignItems: "center",
+    justifyContent: "center",
+    // alignSelf: 'center',
+    // paddingHorizontal: 20,
+    // backgroundColor: "#0000EE",
+    // borderWidth: '0.2',
+    borderRadius: 10,
+    // borderColor: '#5177f5',
+    // backgroundColor: '#5177f5',
+  },
+  clearCartText: {
+    // flex: 1,
+    // borderWidth: 1,
+    // borderColor: 'red',
+    // backgroundColor: 'red',
+    textAlign: "center",
+    color: "#5177f5",
+    justifyContent: "center",
+    // color: "white",
+    fontSize: 20,
+    // fontWeight: "bold",
   },
   textTotal: {
     textAlign: "center",

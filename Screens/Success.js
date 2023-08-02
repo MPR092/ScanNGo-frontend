@@ -8,7 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 //Toast Beautiful Messages
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 
-const Success = ({navigation}) => {
+const Success = (props) => {
 
   // const { totalP } = route.params;
 
@@ -44,7 +44,7 @@ const Success = ({navigation}) => {
     //   // text3: "Try to scan barcodes to add them to the cart"
     // })//toast
 
-    navigation.navigate("Main")
+    props.navigation.navigate("Main")
   }
 
   const handleLogout = async () => {
@@ -60,7 +60,7 @@ const Success = ({navigation}) => {
       })
  
       // Additional logout logic ( navigating to the login screen)
-      navigation.navigate("Login")
+      props.navigation.navigate("Login")
 
     } catch (error) {
       // Handle error if necessary

@@ -144,7 +144,7 @@ const ShoppingCart = (props) => {
   });
 
   //rendering data
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }) => (    
     <View style={styles.data}>
       <View style={styles.itemContainer}>
         <View style={{ flex: 1, flexDirection: "row", elevation: 20 }}>
@@ -459,6 +459,7 @@ const styles = StyleSheet.create({
   ListContainer: {
     flex: 1,
     // backgroundColor: "#D3D3D3",
+    backgroundColor: '#b5babd',
     textAlign: "center",
     alignItems: "center",
     justifyContent: "center",
@@ -466,7 +467,8 @@ const styles = StyleSheet.create({
   ListEmpty: {
     flex: 1,
     // padding: 5,
-    backgroundColor: "#D3D3D3",
+    // backgroundColor: "#D3D3D3",
+    backgroundColor: '#b5babd',
     textAlign: "center",
     alignItems: "center",
     justifyContent: "center",
@@ -487,6 +489,7 @@ const mapDispatchToProps = (dispatch) => {
     addItemToCart: (product) =>
       dispatch(actions.addToCart({ quantity: 1, product })),
     clearCart: () => dispatch(actions.clearCart()),
+    removeFromCart: (item) => dispatch(actions.removeFromCart(item))
   };
 };
 

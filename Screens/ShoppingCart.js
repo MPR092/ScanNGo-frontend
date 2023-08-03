@@ -40,6 +40,12 @@ const ShoppingCart = (props) => {
     // Perform the action to clear the cart here
     props.clearCart();
 
+    Toast.show({
+      topOffset: 60,
+      type: "success",
+      text1: "Cart Cleared",
+    });
+
     // After clearing the cart, close the modal
     setModalVisible(false);
   };

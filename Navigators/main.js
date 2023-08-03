@@ -9,7 +9,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 //redux
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
 //screens
 import ShoppingCart from "../Screens/ShoppingCart";
@@ -36,7 +36,7 @@ const Main = (props) => {
           tabBarIcon: ({ color, size }) => (
             <Icon name="shopping-cart" size={size} color={color} />
           ),
-          
+
           headerTitle: () => (
             <View
               style={{
@@ -55,8 +55,8 @@ const Main = (props) => {
             </View>
           ),
 
-          tabBarLabel: 'Cart', // Custom label for the tab
-          tabBarBadge: (props.cartItems.length) ? (props.cartItems.length)  : null, // Display a badge on the tab
+          tabBarLabel: "Cart", // Custom label for the tab
+          tabBarBadge: props.cartItems.length ? props.cartItems.length : null, // Display a badge on the tab
           // tabBarBadgeStyle: { backgroundColor: 'red' }, // Style the badge background
         }}
       />
@@ -87,9 +87,9 @@ const Main = (props) => {
 const mapStateToProps = (state) => {
   const { cartItems } = state;
   return {
-      cartItems: cartItems
-  }
-}
+    cartItems: cartItems,
+  };
+};
 
 // export default Main;
 

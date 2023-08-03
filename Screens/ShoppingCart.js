@@ -18,6 +18,9 @@ import baseURL from "../assets/common/BaseUrl";
 import { connect } from "react-redux";
 import * as actions from "../Redux/Actions/cartActions";
 
+//import Fancy Modal for clearing cart
+import FancyConfirmModal from '../Shared/FancyConfirmModal'
+
 //Toast Beautiful Messages
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 
@@ -28,6 +31,18 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 const ShoppingCart = (props) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+
+  //Modal for confirm clear cart
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  //Handling Clear Cart Button
+  const handleClearCart = () => {
+    // Perform the action to clear the cart here
+    props.clearCart();
+
+    // After clearing the cart, close the modal
+    setModalVisible(false);
+  };
 
   //handle checkout
   const handleCheckout = () => {
@@ -219,9 +234,15 @@ const ShoppingCart = (props) => {
             paddingHorizontal: 10,
           }}
         >
-          <TouchableOpacity style={styles.clearCart}>
+          <TouchableOpacity style={styles.clearCart} onPress={() => setModalVisible(true)}>
             <Text style={styles.clearCartText}>Clear Cart</Text>
           </TouchableOpacity>
+
+          <FancyConfirmModal
+        isVisible={isModalVisible}
+        onCancel={() => setModalVisible(false)}
+        onConfirm={handleClearCart}
+      />
 
           <View style={styles.itemTotal}>
             {/* <Text style={styles.textTotal}>Total: $ {totalP}</Text> */}
@@ -459,6 +480,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addItemToCart: (product) =>
       dispatch(actions.addToCart({ quantity: 1, product })),
+    clearCart: () => dispatch(actions.clearCart()),
   };
 };
 

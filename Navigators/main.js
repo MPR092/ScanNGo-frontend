@@ -8,14 +8,18 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+//redux
+import { connect } from 'react-redux';
+
 //screens
 import ShoppingCart from "../Screens/ShoppingCart";
 import UserProfile from "../Screens/userProfile";
+// import CartIcon from "../Shared/cartIcon";
 // import Admin from '../Screens/admin'
 
 const Tab = createBottomTabNavigator();
 
-const Main = () => {
+const Main = (props) => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -52,7 +56,7 @@ const Main = () => {
           ),
 
           tabBarLabel: 'Cart', // Custom label for the tab
-          // tabBarBadge: 3, // Display a badge on the tab
+          tabBarBadge: (props.cartItems.length) ? (props.cartItems.length)  : null, // Display a badge on the tab
           // tabBarBadgeStyle: { backgroundColor: 'red' }, // Style the badge background
         }}
       />
@@ -80,74 +84,14 @@ const Main = () => {
   );
 };
 
-export default Main;
-
-{
-  /* <Tab.Navigator
-      initialRouteName="Cart"
-      // screenOptions={{ headerShown: true }}
-      tabBarOptions={{
-        keyboardHidesTabBar: true,
-        // showLabel: true,
-        showLabel: false,
-        activeTintColor: "#6342E8",
-        // tabBarLabel: 'Rocket Screen', // Custom label for the tab
-        // tabBarBadge: 3, // Display a badge on the tab
-        // tabBarBadgeStyle: { backgroundColor: 'red' }, // Style the badge background
-      }}
-      // options={{
-      //   tabBarIcon: ({ color, size }) => (
-      //     <FontAwesome5 name="shopping-cart" size={24} color="black" />
-      //   ),
-      //   // showLabel: true,
-      //   showLabel: false,
-      //   // tabBarLabel: 'Rocket Screen', // Custom label for the tab
-      //   // tabBarBadge: 3, // Display a badge on the tab
-      //   // tabBarBadgeStyle: { backgroundColor: 'red' }, // Style the badge background
-      // }}
-    >
-      <Tab.Screen
-        name="Cart"
-        component={ShoppingCart}
-        screenOptions={{
-          tabBarIcon: ({ color }) => {
-            <MaterialCommunityIcons name="cart" size={50} color="black" />
-          },
-        }}
-      />
-      <Tab.Screen 
-        name="Admin"
-        component={UserProfile}
-        options={{
-          tabBarIcon: ({ color }) => {
-            <FontAwesome name="user" size={24} color="black" />
-            // <Icon
-            //   name='cog'
-            //   style={{ position: 'relative'}}
-            //   // color='#3A3B3C'
-            //   color={color}
-            //   size={30}
-            // />
-          }
-        }} 
-      />
-      <Tab.Screen
-        name="User Profile"
-        component={UserProfile}
-        options={{
-          tabBarIcon: ({ color }) => {
-            <Icon
-              name="user"
-              style={{ position: "relative" }}
-              color="#3A3B3C"
-              // color={color}
-              size={30}
-            />;
-          },
-        }}
-      />
-    </Tab.Navigator> */
+const mapStateToProps = (state) => {
+  const { cartItems } = state;
+  return {
+      cartItems: cartItems
+  }
 }
+
+// export default Main;
 
 const styles = StyleSheet.create({
   headerTitle: {
@@ -162,3 +106,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
 });
+
+export default connect(mapStateToProps)(Main);

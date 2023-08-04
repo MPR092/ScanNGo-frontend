@@ -97,7 +97,7 @@ const ShoppingCart = (props) => {
             if (res.data.product) {
               const productDataFromAPI = res.data.product;
               // Do something with the product data
-              console.log("Product found:", productDataFromAPI);
+              // console.log("Product found:", productDataFromAPI);
 
               // add to redux store
               props.addItemToCart(productDataFromAPI);
@@ -144,7 +144,7 @@ const ShoppingCart = (props) => {
   });
 
   //rendering data
-  const renderItem = ({ item }) => (    
+  const renderItem = ({ item }) => (
     <View style={styles.data}>
       <View style={styles.itemContainer}>
         <View style={{ flex: 1, flexDirection: "row", elevation: 20 }}>

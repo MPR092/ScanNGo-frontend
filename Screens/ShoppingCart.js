@@ -19,7 +19,13 @@ import { connect } from "react-redux";
 import * as actions from "../Redux/Actions/cartActions";
 
 //import Fancy Modal for clearing cart
-import FancyConfirmModal from '../Shared/FancyConfirmModal'
+import FancyConfirmModal from "../Shared/FancyConfirmModal";
+
+//import Modal for removing one item
+import ConfirmItemDeleteModal from "../Shared/ConfirmItemDeleteModal";
+
+//icon
+import { EvilIcons } from "@expo/vector-icons";
 
 //Toast Beautiful Messages
 import { Toast } from "react-native-toast-message/lib/src/Toast";
@@ -34,6 +40,9 @@ const ShoppingCart = (props) => {
 
   //Modal for confirm clear cart
   const [isModalVisible, setModalVisible] = useState(false);
+
+  // Modal for confirm remove single item from cart
+  const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
 
   //Handling Clear Cart Button
   const handleClearCart = () => {
@@ -139,8 +148,8 @@ const ShoppingCart = (props) => {
   }
 
   var totalP = 0;
-  props.cartItems.forEach(cart => {
-    return (totalP += cart.product.price)
+  props.cartItems.forEach((cart) => {
+    return (totalP += cart.product.price);
   });
 
   //rendering data
@@ -160,6 +169,20 @@ const ShoppingCart = (props) => {
           <View style={styles.item3}>
             <Text style={styles.textPrice}>$ {item.product.price}</Text>
           </View>
+
+          <View style={styles.trashIcon}>
+            <TouchableOpacity onPress={() => setDeleteModalVisible(true)}>
+              <EvilIcons name="trash" size={24} color="red" />
+            </TouchableOpacity>
+          </View>
+
+          <ConfirmItemDeleteModal
+            isVisible={isDeleteModalVisible}
+            onCancel={() => setDeleteModalVisible(false)}
+            onConfirm={() => {
+              props.removeFromCart(item), setDeleteModalVisible(false);
+            }}
+          />
         </View>
       </View>
     </View>
@@ -240,15 +263,18 @@ const ShoppingCart = (props) => {
             paddingHorizontal: 10,
           }}
         >
-          <TouchableOpacity style={styles.clearCart} onPress={() => setModalVisible(true)}>
+          <TouchableOpacity
+            style={styles.clearCart}
+            onPress={() => setModalVisible(true)}
+          >
             <Text style={styles.clearCartText}>Clear Cart</Text>
           </TouchableOpacity>
 
           <FancyConfirmModal
-        isVisible={isModalVisible}
-        onCancel={() => setModalVisible(false)}
-        onConfirm={handleClearCart}
-      />
+            isVisible={isModalVisible}
+            onCancel={() => setModalVisible(false)}
+            onConfirm={handleClearCart}
+          />
 
           <View style={styles.itemTotal}>
             {/* <Text style={styles.textTotal}>Total: $ {totalP}</Text> */}
@@ -291,7 +317,7 @@ const styles = StyleSheet.create({
   },
   scannerContainer: {
     flex: 1,
-    backgroundColor: '#b5babd'
+    backgroundColor: "#b5babd",
   },
   header: {
     flex: 1,
@@ -459,7 +485,7 @@ const styles = StyleSheet.create({
   ListContainer: {
     flex: 1,
     // backgroundColor: "#D3D3D3",
-    backgroundColor: '#b5babd',
+    backgroundColor: "#b5babd",
     textAlign: "center",
     alignItems: "center",
     justifyContent: "center",
@@ -468,10 +494,19 @@ const styles = StyleSheet.create({
     flex: 1,
     // padding: 5,
     // backgroundColor: "#D3D3D3",
-    backgroundColor: '#b5babd',
+    backgroundColor: "#b5babd",
     textAlign: "center",
     alignItems: "center",
     justifyContent: "center",
+  },
+  trashIcon: {
+    // borderWidth: 1,
+    borderRadius: 15,
+    margin: 5,
+    // padding: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    // backgroundColor: 'red',
   },
 });
 
@@ -489,7 +524,7 @@ const mapDispatchToProps = (dispatch) => {
     addItemToCart: (product) =>
       dispatch(actions.addToCart({ quantity: 1, product })),
     clearCart: () => dispatch(actions.clearCart()),
-    removeFromCart: (item) => dispatch(actions.removeFromCart(item))
+    removeFromCart: (item) => dispatch(actions.removeFromCart(item)),
   };
 };
 

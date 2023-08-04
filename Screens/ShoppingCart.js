@@ -160,11 +160,15 @@ const ShoppingCart = (props) => {
     return <Text>No access to camera</Text>;
   }
 
+  var total = 0;
   var totalP = 0;
   props.cartItems.forEach((cart) => {
-    return (totalP += cart.product.price);
+    return (total += cart.product.price);
   });
 
+  //Total to 2 decimal
+  totalP = total.toFixed(2);
+  
   //rendering data
   const renderItem = ({ item, index }) => {
     const isLastAddedItem = index === props.cartItems.length - 1;

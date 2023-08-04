@@ -38,6 +38,10 @@ const ShoppingCart = (props) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
 
+  // variable to highlight newly added item
+  const [lastAddedItemId, setLastAddedItemId] = useState(null); // State to keep track of the last added item
+
+
   //Modal for confirm clear cart
   const [isModalVisible, setModalVisible] = useState(false);
 
@@ -111,6 +115,15 @@ const ShoppingCart = (props) => {
               // add to redux store
               props.addItemToCart(productDataFromAPI);
 
+              // Code to highlight the latest item added
+              // Set the ID of the last added item
+              setLastAddedItemId(productDataFromAPI.id);
+              
+              //check if last added item
+              // console.log("productDataFromAPI.id:", productDataFromAPI.id);
+              // console.log("lastAddedItemId:", lastAddedItemId);
+              // console.log(productDataFromAPI.id === lastAddedItemId);
+
               Toast.show({
                 topOffset: 60,
                 type: "success",
@@ -153,9 +166,15 @@ const ShoppingCart = (props) => {
   });
 
   //rendering data
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item, index }) => {
+    const isLastAddedItem = index === props.cartItems.length - 1;
+    // console.log(isLastAddedItem);
+    const itemStyle = isLastAddedItem ? styles.itemContainerHighlighted : styles.itemContainer;
+    // const setLastAddedItemId = false;
+
+    return (
     <View style={styles.data}>
-      <View style={styles.itemContainer}>
+      <View style={itemStyle}>
         <View style={{ flex: 1, flexDirection: "row", elevation: 20 }}>
           <View style={styles.item1}>
             <Text style={styles.textName}>{item.product.name}</Text>
@@ -187,6 +206,7 @@ const ShoppingCart = (props) => {
       </View>
     </View>
   );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -427,8 +447,20 @@ const styles = StyleSheet.create({
     flex: 1,
     // backgroundColor: "#D3D3D3",
     backgroundColor: "white",
+    // borderWidth: 1,
     borderRadius: 5,
     alignItems: "center",
+  },
+  itemContainerHighlighted: {
+    flex: 1,
+    // backgroundColor: "#D3D3D3",
+    backgroundColor: "white",
+    // borderWidth: 1,
+    borderRadius: 5,
+    alignItems: "center",
+    borderWidth: 2,
+    // backgroundColor: 'blue',
+    borderColor: 'blue',
   },
   itemTotal: {
     flex: 1,

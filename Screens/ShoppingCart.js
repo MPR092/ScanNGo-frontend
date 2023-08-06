@@ -280,7 +280,7 @@ const ShoppingCart = (props) => {
           {scanned && (
             <View style={styles.buttonContainer}>
             <Button
-              title={"Tap to Scan Again"}
+              title={"Tap to Scan"}
               color='white'
               onPress={() => setScanned(false)}
             />

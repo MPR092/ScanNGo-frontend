@@ -33,6 +33,42 @@ import { Toast } from "react-native-toast-message/lib/src/Toast";
 // For Barcode Scan
 import { Button, Modal } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
+import { Audio } from 'expo-av'; //Audio
+
+//Sound Load
+let scannerSound = new Audio.Sound();
+let errorSound = new Audio.Sound();
+
+// Load sounds when the component mounts (or at the appropriate time)
+async function loadSounds() {
+  try {
+    await scannerSound.loadAsync(require('../assets/sound/beep_sound.mp3'));
+    await errorSound.loadAsync(require('../assets/sound/error.wav'));
+  } catch (error) {
+    console.error('Error loading sounds', error);
+  }
+}
+
+// Play beep sound with function call
+async function playBeepSound() {
+  try {
+    await scannerSound.setPositionAsync(0); // Reset the sound position to the beginning
+    await scannerSound.playAsync();
+  } catch (error) {
+    console.error('Error playing beep sound', error);
+  }
+}
+
+// Play error sound with function call
+async function playErrorSound() {
+  try {
+    await errorSound.setPositionAsync(0); // Reset the sound position to the beginning
+    await errorSound.playAsync();
+  } catch (error) {
+    console.error('Error playing error sound', error);
+  }
+}
+
 
 const ShoppingCart = (props) => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -74,6 +110,9 @@ const ShoppingCart = (props) => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === "granted");
     };
+
+    //Called once to load the sounds
+    loadSounds();
 
     getBarCodeScannerPermissions();
   }, []);
@@ -124,6 +163,8 @@ const ShoppingCart = (props) => {
               // console.log("lastAddedItemId:", lastAddedItemId);
               // console.log(productDataFromAPI.id === lastAddedItemId);
 
+              playBeepSound();
+
               Toast.show({
                 topOffset: 60,
                 type: "success",
@@ -137,9 +178,12 @@ const ShoppingCart = (props) => {
           if (error.response && error.response.status === 404) {
             // Invalid upc, display error message
             console.log("UPC: ", upc, "|", error.response.data.message);
+            
+            playErrorSound();
+
             Toast.show({
               topOffset: 60,
-              type: "info",
+              type: "error",
               text1: `${error.response.data.message}`,
             });
           } else if (error && error.response.status === 500) {
@@ -234,11 +278,13 @@ const ShoppingCart = (props) => {
             ]}
           />
           {scanned && (
+            <View style={styles.buttonContainer}>
             <Button
-              style={StyleSheet.absoluteFillObject}
               title={"Tap to Scan Again"}
+              color='white'
               onPress={() => setScanned(false)}
             />
+            </View>
           )}
         </TouchableOpacity>
       </View>
@@ -367,6 +413,13 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     // paddingVertical: 12,
     // padding: 10,
+  },
+  buttonContainer: {
+    flex: 1,
+    // alignSelf: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#6342E8',
+    style: StyleSheet.absoluteFillObject,
   },
   button2: {
     flex: 0,

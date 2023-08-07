@@ -9,10 +9,10 @@ import Icon from "react-native-vector-icons/FontAwesome";
 // SignedOut Screens
 import Login from "../Screens/Login";
 import Register from "../Screens/Register";
-import WelcomeIcon from "../Screens/WelcomeIcon";
+// import WelcomeIcon from "../Screens/WelcomeIcon";
 
 // SignedIn Screens
-import ShoppingCart from "../Screens/ShoppingCart";
+// import ShoppingCart from "../Screens/ShoppingCart";
 import Success from "../Screens/Success";
 import Help from "../Screens/Help";
 
@@ -21,6 +21,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //Bottom Tab Navigator
 import Main from "./main";
+
+//Top Tab Navigator
+import CheckoutNavigator from "./CheckoutNavigator";
 
 const Stack = createNativeStackNavigator();
 
@@ -65,12 +68,17 @@ function MyStacks() {
                 component={Help}
                 options={{ headerShown: false, title: "Help" }}
               />
-              <Stack.Screen
+              {/* <Stack.Screen
                 name="Success"
                 component={Success}
                 options={{ headerShown: true, title: "Checkout" }}
-              />
+              /> */}
               <Stack.Screen
+                name="Checkout"
+                component={CheckoutNavigator}
+                options={{ headerShown: true, title: "Checkout" }}
+              />
+              {/* <Stack.Screen
                 name="ShoppingCart"
                 component={ShoppingCart}
                 options={{
@@ -98,7 +106,7 @@ function MyStacks() {
                   headerBackVisible: false,
                   gestureEnabled: false,
                 }}
-              />
+              /> */}
             {/* </>
           ) : (
             // If the user is not logged in, show the login screen

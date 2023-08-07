@@ -11,11 +11,14 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 //redux
 import { connect } from "react-redux";
 
+// Access admin data stored before (replace with your logic)
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 //screens
 import ShoppingCart from "../Screens/ShoppingCart";
 import UserProfile from "../Screens/userProfile";
 // import CartIcon from "../Shared/cartIcon";
-// import Admin from '../Screens/admin'
+import AdminPage from '../Screens/AdminPage'
 
 const Tab = createBottomTabNavigator();
 
@@ -73,7 +76,7 @@ const Main = (props) => {
       />
       {/* <Tab.Screen
         name="Admin"
-        component={UserProfile}
+        component={AdminPage}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Icon name="cog" size={size} color={color} />

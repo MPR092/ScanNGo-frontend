@@ -28,6 +28,7 @@ const Main = (props) => {
         tabBarInactiveTintColor: "grey",
         tabBarHideOnKeyboard: true,
       }}
+      initialRouteName="Cart"
     >
       <Tab.Screen
         name="Cart"

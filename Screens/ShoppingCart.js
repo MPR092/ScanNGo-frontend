@@ -101,7 +101,7 @@ const ShoppingCart = (props) => {
 
   //handle checkout
   const handleCheckout = () => {
-    props.navigation.navigate("Success");
+    props.navigation.navigate('Success');
   };
 
   //for permissions
@@ -354,7 +354,7 @@ const ShoppingCart = (props) => {
 
         <TouchableOpacity
           style={styles.button2}
-          onPress={() => handleCheckout()}
+          onPress={() => props.navigation.navigate('Checkout')}
         >
           {/* <Text style={styles.buttonText}>Checkout $ {totalP}</Text> */}
           <Text style={styles.buttonText}>Checkout (${totalP})</Text>

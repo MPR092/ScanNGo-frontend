@@ -1,8 +1,15 @@
 // import * as React from "react";
 import React, { useState, useEffect } from "react";
-import { Image } from "expo-image";
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
-import { FontFamily, Color, FontSize } from "../GlobalStyles";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  TouchableOpacity,
+} from "react-native";
+
+//Toast Beautiful Messages
+import { Toast } from "react-native-toast-message/lib/src/Toast";
 
 //access user data stored before
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -11,34 +18,74 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from "react-native-vector-icons/FontAwesome";
 // import { Avatar } from "@react-native-material/core";
 // import Icon1 from "@expo/vector-icons/MaterialCommunityIcons";
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5 } from "@expo/vector-icons";
 
-const UserProfile = () => {
-  const [USER, setUSER] = useState(null);
+const UserProfile = (props) => {
+  const [USER, setUSER] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+
+  // const fetchUserData = async () => {
+  //   try {
+  //     const user = JSON.parse(await AsyncStorage.getItem('USER'));
+  //     console.log('Fetched user data:', user);
+  //     setUSER(user || {});
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     console.error("Error fetching user data: ", error);
+  //     setError(error.message);
+  //     setIsLoading(false);
+  //   }
+  // };
 
   // Sample user data
   const userData = {
-    name: "John Doe",
-    email: "john.doe@example.com",
+    // name: "John Doe",
+    // email: "john.doe@example.com",
     creditCard: "**** **** **** 1234",
   };
 
+  const handleLogout = async () => {
+    // event.preventDefault();
+    try {
+      // Clear AsyncStorage data
+      await AsyncStorage.clear();
+      // Reset the USER state to null
+      setUSER(null);
+
+      Toast.show({
+        topOffset: 60,
+        type: "success",
+        text1: "Logout Successful",
+        text2: "Thank you for choosing ScanNGo",
+      });
+
+      // Additional logout logic ( navigating to the login screen)
+      props.navigation.navigate("Login");
+    } catch (error) {
+      // Handle error if necessary
+      console.log("Error while logging out:", error);
+    }
+  };
+
   useEffect(() => {
-    // Fetch user data from AsyncStorage
+    //Fetch user data from AsyncStorage
     const fetchUSERData = async () => {
       try {
-        const user = JSON.parse(await AsyncStorage.getItem('USER'));
+        const user = JSON.parse(await AsyncStorage.getItem("USER"));
+        console.log("Fetched user data:", user);
         setUSER(user);
+        setIsLoading(false); // Set loading to false once data is fetched
       } catch (error) {
         console.error("Error fetching user data: ", error);
+        setIsLoading(false); // Set loading to false even if there's an error
       }
     };
 
     fetchUSERData();
   }, []);
 
-  // Show loading or error message while fetching data
-  if (userData === null) {
+  // Show loading message while fetching data
+  if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
         <Text>Loading...</Text>
@@ -49,43 +96,61 @@ const UserProfile = () => {
   return (
     <SafeAreaView style={styles.container}>
       {/* Profile Icon */}
-      <FontAwesome5 name="user-circle" size={50} style={styles.profileIcon} color="#6342E8" />
-      <Text style={styles.profileIconText} >User Profile</Text>
-
-      {/* User Name */}
-      {USER?.name && ( // Check if USER.name is available
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Icon
-          name="user"
-          size={20}
+      <View style={styles.header}>
+        <FontAwesome5
+          name="user-circle"
+          size={50}
+          style={styles.profileIcon}
           color="#6342E8"
-          style={styles.userIcon}
         />
-        {/* <Text style={styles.userName}>{userData.name}</Text> */}
-        <Text style={styles.userName}>{USER.name}</Text>
+        <Text style={styles.profileIconText}>User Profile</Text>
       </View>
-      )}
 
-      {/* User Email */}
-      {USER?.email && ( // Check if USER.email is available
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Icon
-          name="envelope"
-          size={20}
-          color="#6342E8"
-          style={styles.emailIcon}
-        />
-        {/* <Text style={styles.userEmail}>{userData.email}</Text> */}
-        <Text style={styles.userEmail}>{USER.email}</Text>
-      </View>
-      )}
+      <View style={styles.body}>
+        {/* User Name */}
+        {/* {USER?.name && ( // Check if USER.name is available */}
+        <View
+          style={styles.bodyText}
+        >
+          <Icon name="user" size={20} color="#6342E8" style={styles.userIcon} />
+          {/* <Text style={styles.userName}>{userData.name}</Text> */}
+          <Text style={styles.userName}>{USER?.name}</Text>
+        </View>
+        {/* )} */}
 
-      {/* Credit Card Details */}
-      <View style={styles.creditCardContainer}>
+        {/* User Email */}
+        {/* {USER?.email && ( // Check if USER.email is available */}
+        <View
+          style={styles.bodyText}
+        >
+          <Icon
+            name="envelope"
+            size={20}
+            color="#6342E8"
+            style={styles.emailIcon}
+          />
+          {/* <Text style={styles.userEmail}>{userData.email}</Text> */}
+          <Text style={styles.userEmail}>{USER?.email}</Text>
+        </View>
+        {/* )} */}
+
+        {/* Credit Card Details */}
+        {/* <View style={styles.creditCardContainer}>
         <Text style={styles.creditCardLabel}>Credit Card:</Text>
         <Text style={styles.creditCardNumber}>{userData.creditCard}</Text>
+      </View> */}
       </View>
 
+      <View style={styles.footer}>
+        <TouchableOpacity
+          style={styles.button2}
+          onPress={() => {
+            handleLogout();
+          }}
+        >
+          <Text style={styles.buttonText}>Logout</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -96,6 +161,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     // paddingHorizontal: 20, // Add some horizontal padding for better spacing
+  },
+  header: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  body: {
+    flex: 1.5,
+    // borderWidth: 0.5,
+    alignItems: "center",
+    justifyContent: "center",
   },
   profileIcon: {
     fontSize: 50,
@@ -150,6 +226,36 @@ const styles = StyleSheet.create({
   creditCardNumber: {
     textAlign: "right", // Align text to the right
     // fontSize: FontSize.size_m, // If FontSize.size_m is defined elsewhere, you can uncomment this line
+  },
+  footer: {
+    flex: 1,
+    // padding: 60,
+    // margin: 50
+  },
+  button2: {
+    flex: 0,
+    backgroundColor: "#6342E8",
+    borderRadius: 10,
+    paddingVertical: 12,
+    padding: 10,
+    margin: 10,
+  },
+  buttonText: {
+    color: "#ffffff",
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  bodyText: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 0.2,
+    borderRadius: 15,
+    paddingVertical: 10,
+    margin: 1,
+    marginHorizontal: 15,
+    paddingHorizontal: 20,
+    elevation: 20,
   },
 });
 

@@ -15,7 +15,7 @@ import { useTogglePasswordVisibility } from '../Shared/Hooks/useTogglePasswordVi
 import baseURL from '../assets/common/BaseUrl'
 
 //Bottom Tab Navigator
-import Main from "../Navigators/main";
+// import Main from "../Navigators/main";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
@@ -24,7 +24,7 @@ import axios from 'axios';
 // import AuthGlobal from '../Context/store/AuthGlobal';
 // import { loginUser } from '../Context/actions/Auth.actions';
 
-const Login = ({navigation}) => {
+const Login = (props, {navigation}) => {
   
   //context
   // const context = useContext(AuthGlobal);
@@ -90,7 +90,7 @@ const Login = ({navigation}) => {
           })//toast
 
           // navigation.navigate("ShoppingCart")
-          navigation.navigate("Main")
+          props.navigation.navigate('Main')
 
         })//then
         .catch(error => {

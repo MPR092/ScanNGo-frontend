@@ -8,6 +8,12 @@ import {
   SafeAreaView
 } from "react-native";
 
+//for pdf generation
+import PDFLib, { PDFDocument, PDFPage, PDFText, PDFImage } from 'react-native-pdf-lib';
+
+//for sending email
+import Mailer from 'react-native-mail';
+
 //db connect
 import baseURL from '../../assets/common/BaseUrl'
 import axios from 'axios';
@@ -20,6 +26,39 @@ import { connect } from "react-redux";
 import * as actions from "../../Redux/Actions/cartActions";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+//Create Email Content
+const generateEmailContent = (orderData, cardNumber) => {
+  // console.log("Data: ",orderData)
+  const emailContent = `
+    <h1>ScanNGo</h1>
+    <h2>Order Receipt</h2>
+    <p>Card Number: **** **** **** ${cardNumber.slice(-4)}</p>
+    <h2>Items:</h2>
+    ${orderData.orderItems
+      .map(
+        (item) =>
+          `<p>Product: ${item.product.name}, Price: $${item.product.price}</p>`
+      )
+      .join('')}
+  `;
+  return emailContent;
+};
+
+//Send Email
+const sendEmail = (htmlContent) => {
+  try {
+    Mailer.mail({
+      subject: 'ScanNGo Order Receipt',
+      recipients: ['pirzadahasan12@gmail.com'],
+      body: htmlContent,
+      isHTML: true,
+    });
+    console.log('Email sent successfully');
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
+};
 
 const Confirm = (props) => {
   const [token, setToken] = useState("");
@@ -40,7 +79,7 @@ const Confirm = (props) => {
     const cardDetails = props.route.params;
     console.log(cardDetails);
 
-    const confirmOrder = () => {
+    const confirmOrder = async () => {
 
       //to append jwt token to the api
     const config = {
@@ -71,6 +110,10 @@ const Confirm = (props) => {
               props.navigation.navigate('Cart');
           }, 500)
           console.log("Product Upload Successfull");
+          //...
+          // const emailContent = generateEmailContent(finalOrder.order, finalOrder.card.number);
+          // sendEmail(emailContent);
+          //...
           }
         })
         .catch((error) => {

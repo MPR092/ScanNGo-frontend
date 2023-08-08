@@ -6,6 +6,7 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 
 //Toast Beautiful Messages
@@ -20,22 +21,32 @@ import Icon from "react-native-vector-icons/FontAwesome";
 // import Icon1 from "@expo/vector-icons/MaterialCommunityIcons";
 import { FontAwesome5 } from "@expo/vector-icons";
 
+
+//Fetch user data from AsyncStorage
+// const fetchUSERData = async () => {
+//   try {
+//     const user = JSON.parse(await AsyncStorage.getItem("USER"));
+//     console.log("Fetched user data:", user);
+//     setUSER(user);
+//     setIsLoading(false);
+//     setLoading(false);
+//     // Set loading to false once data is fetched
+//   } catch (error) {
+//     console.error("Error fetching user data: ", error);
+//     // setIsLoading(false); // Set loading to false even if there's an error
+//   }
+// };
+
+// const checkuser = () => {
+//   const [USER, setUSER] = useState({});
+// }
+
+
 const UserProfile = (props) => {
   const [USER, setUSER] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
-  // const fetchUserData = async () => {
-  //   try {
-  //     const user = JSON.parse(await AsyncStorage.getItem('USER'));
-  //     console.log('Fetched user data:', user);
-  //     setUSER(user || {});
-  //     setIsLoading(false);
-  //   } catch (error) {
-  //     console.error("Error fetching user data: ", error);
-  //     setError(error.message);
-  //     setIsLoading(false);
-  //   }
-  // };
+  const [loading, setLoading] = useState(true);
 
   // Sample user data
   const userData = {
@@ -49,8 +60,10 @@ const UserProfile = (props) => {
     try {
       // Clear AsyncStorage data
       await AsyncStorage.clear();
+      // await AsyncStorage.removeItem('USER');
+      // await AsyncStorage.removeItem('token');
       // Reset the USER state to null
-      setUSER(null);
+      setUSER("");
 
       Toast.show({
         topOffset: 60,
@@ -60,6 +73,7 @@ const UserProfile = (props) => {
       });
 
       // Additional logout logic ( navigating to the login screen)
+      props.navigation.navigate("Cart");
       props.navigation.navigate("Login");
     } catch (error) {
       // Handle error if necessary
@@ -67,17 +81,20 @@ const UserProfile = (props) => {
     }
   };
 
+
   useEffect(() => {
     //Fetch user data from AsyncStorage
     const fetchUSERData = async () => {
       try {
         const user = JSON.parse(await AsyncStorage.getItem("USER"));
-        console.log("Fetched user data:", user);
+        // console.log("Fetched user data:", user);
         setUSER(user);
-        setIsLoading(false); // Set loading to false once data is fetched
+        setIsLoading(false);
+        setLoading(false);
+        // Set loading to false once data is fetched
       } catch (error) {
         console.error("Error fetching user data: ", error);
-        setIsLoading(false); // Set loading to false even if there's an error
+        // setIsLoading(false); // Set loading to false even if there's an error
       }
     };
 
@@ -106,40 +123,52 @@ const UserProfile = (props) => {
         <Text style={styles.profileIconText}>User Profile</Text>
       </View>
 
-      <View style={styles.body}>
-        {/* User Name */}
-        {/* {USER?.name && ( // Check if USER.name is available */}
-        <View
-          style={styles.bodyText}
-        >
-          <Icon name="user" size={20} color="#6342E8" style={styles.userIcon} />
-          {/* <Text style={styles.userName}>{userData.name}</Text> */}
-          <Text style={styles.userName}>{USER?.name}</Text>
-        </View>
-        {/* )} */}
+      {loading == false ? (
+        
+        <View style={styles.body}>
+          {/* User Name */}
+          {/* {USER?.name && ( // Check if USER.name is available */}
+          <View style={styles.bodyText}>
+            <Icon
+              name="user"
+              size={20}
+              color="#6342E8"
+              style={styles.userIcon}
+            />
+            {/* <Text style={styles.userName}>{userData.name}</Text> */}
+            <Text style={styles.userName}>{USER?.name}</Text>
+          </View>
+          {/* )} */}
 
-        {/* User Email */}
-        {/* {USER?.email && ( // Check if USER.email is available */}
-        <View
-          style={styles.bodyText}
-        >
-          <Icon
-            name="envelope"
-            size={20}
-            color="#6342E8"
-            style={styles.emailIcon}
-          />
-          {/* <Text style={styles.userEmail}>{userData.email}</Text> */}
-          <Text style={styles.userEmail}>{USER?.email}</Text>
-        </View>
-        {/* )} */}
+          {/* User Email */}
+          {/* {USER?.email && ( // Check if USER.email is available */}
+          <View style={styles.bodyText}>
+            <Icon
+              name="envelope"
+              size={20}
+              color="#6342E8"
+              style={styles.emailIcon}
+            />
+            {/* <Text style={styles.userEmail}>{userData.email}</Text> */}
+            <Text style={styles.userEmail}>{USER?.email}</Text>
+          </View>
+          {/* )} */}
 
-        {/* Credit Card Details */}
-        {/* <View style={styles.creditCardContainer}>
+          {/* Credit Card Details */}
+          {/* <View style={styles.creditCardContainer}>
         <Text style={styles.creditCardLabel}>Credit Card:</Text>
         <Text style={styles.creditCardNumber}>{userData.creditCard}</Text>
       </View> */}
-      </View>
+        </View>
+ 
+      ) : (
+        <>
+        <View style={[ styles.center, { backgroundColor: '#f2f2f2'} ]}>
+          <ActivityIndicator size='large' color='red' />
+        </View>
+        </>
+        // Loading
+      )}
 
       <View style={styles.footer}>
         <TouchableOpacity
@@ -161,6 +190,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     // paddingHorizontal: 20, // Add some horizontal padding for better spacing
+  },
+  center: {
+    // alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   header: {
     flex: 1,

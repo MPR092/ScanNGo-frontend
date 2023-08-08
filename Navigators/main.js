@@ -11,7 +11,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 //redux
 import { connect } from "react-redux";
 
-// Access admin data stored before (replace with your logic)
+// Access admin data stored before
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwtDecode from 'jwt-decode';
 
@@ -40,25 +40,37 @@ const Main = (props) => {
   const [USER, setUSER] = useState(0);
   // const user = JSON.parse(await AsyncStorage.getItem('USER'));
   // console.log(user.isAdmin);
-  useEffect(() => {
+  
+  
+  ////old useEffect
+  // useEffect(() => {
 
-    //get token
-    AsyncStorage.getItem('USER')
-    .then((res) => {
-      console.log(res)
-      setUSER(JSON.parse(res))
-    })
-    .catch((error) => console.log(error))
-  }, [])
+  //   //get token
+  //   AsyncStorage.getItem('USER')
+  //   .then((res) => {
+  //     console.log(res)
+  //     setUSER(JSON.parse(res))
+  //   })
+  //   .catch((error) => console.log(error))
+  // }, [])
   // [AsyncStorage.getItem('USER')]
 
-  if (USER) {
-    const IsAdmin = USER.isAdmin;
-  }
-  else {
-    const IsAdmin = false;
-  }
-  // console.log(IsAdmin);
+  // useEffect(() => {
+  //   let unsubscribe=props.navigation.addListener("focus",async()=>{
+  //    const user = JSON.parse(await AsyncStorage.getItem("USER"));
+  //    console.log("Fetched user data:", user);
+  //    setUSER(user);
+  //    setIsLoading(false);
+  //    setLoading(false);
+  //   })
+ 
+  //   return unsubscribe;
+  //  }, []);
+
+   
+  // if (USER.isAdmin === true) {
+  //   console.log(USER);
+  // }
 
   return (
     <Tab.Navigator

@@ -89,7 +89,7 @@ const Main = (props) => {
           tabBarIcon: ({ color, size }) => (
             <Icon name="shopping-cart" size={size} color={color} />
           ),
-
+          // gestureEnabled: false,
           headerTitle: () => (
             <View
               style={{
@@ -107,7 +107,6 @@ const Main = (props) => {
               <Text style={styles.headerText}>Cart</Text>
             </View>
           ),
-
           tabBarLabel: "Cart", // Custom label for the tab
           tabBarBadge: props.cartItems.length ? props.cartItems.length : null, // Display a badge on the tab
           // tabBarBadgeStyle: { backgroundColor: 'red' }, // Style the badge background

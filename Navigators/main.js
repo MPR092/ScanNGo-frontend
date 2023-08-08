@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, Text, StyleSheet } from "react-native";
 
@@ -13,16 +13,33 @@ import { connect } from "react-redux";
 
 // Access admin data stored before (replace with your logic)
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import jwtDecode from 'jwt-decode';
 
 //screens
 import ShoppingCart from "../Screens/ShoppingCart";
 import UserProfile from "../Screens/userProfile";
 // import CartIcon from "../Shared/cartIcon";
 import AdminPage from '../Screens/AdminPage'
+import { useEffect } from "react";
+
+
+// const checkIsAdmin = async () => {
+//   // const token = await AsyncStorage.getItem('token');
+//   // const decodedToken = jwtDecode(token);
+//   // console.log(decodedToken);
+//   // return(decodedToken.isAdmin);
+//   const user = JSON.parse(await AsyncStorage.getItem('USER'));
+  
+//   console.log(user);
+//   return user;
+// }
 
 const Tab = createBottomTabNavigator();
 
 const Main = (props) => {
+  // const user = JSON.parse(await AsyncStorage.getItem('USER'));
+  // console.log(user.isAdmin);
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -74,16 +91,19 @@ const Main = (props) => {
           tabBarLabel: "User Profile", // Custom label for the tab
         }}
       />
-      <Tab.Screen
-        name="Admin"
-        component={AdminPage}
-        options={{
+      {/* { user.isAdmin ? (
+        <Tab.Screen
+          name="Admin"
+          component={AdminPage}
+          options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon name="cog" size={size} color={color} />
-          ),
-          tabBarLabel: 'Admin', // Custom label for the tab
-        }}
-      />
+              <Icon name="cog" size={size} color={color} />
+            ),
+            tabBarLabel: 'Admin', // Custom label for the tab
+          }}
+        />
+      ) : null } */}
+      
     </Tab.Navigator>
   );
 };

@@ -23,6 +23,7 @@ import ErrorRed from "../Shared/errorRed";
 import axios from "axios";
 import baseURL from "../assets/common/BaseUrl";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AdminPage = (props) => {
   const [upc, setUpc] = useState("");
@@ -31,8 +32,28 @@ const AdminPage = (props) => {
   const [multiDiscountQty, setMultiDiscountQty] = useState("");
   const [multiDiscountPrice, setMultiDiscountPrice] = useState("");
   const [error, setError] = useState("");
+  const [token, setToken] = useState("");
 
-  const handleCreateProduct = () => {
+  useEffect(() => {
+
+    //get token
+    AsyncStorage.getItem('token')
+    .then((res) => {
+      setToken(res)
+    })
+    .catch((error) => console.log(error))
+  }, [])
+
+  const handleAddProduct = () => {
+
+    //to append jwt token to the api
+    const config = {
+      headers: {
+        "Content-Type": "Application/JSON",
+        Authorization: `Bearer ${token}`
+      }
+    }
+
     // (multiDiscountQty === "") | (multiDiscountPrice === "") // additional
     if (upc === "") {
       setError("Please enter product upc");
@@ -40,6 +61,10 @@ const AdminPage = (props) => {
       setError("Please enter product name");
     } else if (price === "") {
       setError("Please enter product price");
+    } else if (multiDiscountQty === "") {
+      setError("Please enter discount Quantity");
+    } else if (multiDiscountPrice === "") {
+      setError("Please enter discount Price");
     } else {
       // console.log('Product Upload Started')
 
@@ -47,16 +72,14 @@ const AdminPage = (props) => {
         upc: upc,
         name: name,
         price: price,
-        // multiDiscountQty: multiDiscountQty,
-        // multiDiscountPrice: multiDiscountPrice
+        MultiDiscountQty: multiDiscountQty,
+        MultiDiscountPrice: multiDiscountPrice
       };
       // console.log(product);
 
       // Register product to database using server api
       axios
-        .post(`${baseURL}/products/`, product, {
-          "Content-Type": "application/json",
-        })
+        .post(`${baseURL}/products/`, product, config)
         .then((res) => {
           // console.log(res);
           console.log("Product Upload Successfull");
@@ -92,6 +115,8 @@ const AdminPage = (props) => {
         });
     }
   };
+
+
 
   return (
     <KeyboardAwareScrollView style={styles.container}>
@@ -151,12 +176,40 @@ const AdminPage = (props) => {
             />
           </View>
 
+          <View style={styles.inputContainer}>
+            {/* <Text style={styles.inputText} >UPC: </Text> */}
+            <TextInput
+              style={styles.input}
+              placeholder="Multi Discount Quantity"
+              placeholderTextColor="#000000"
+              keyboardType="numeric"
+              autoCapitalize="none"
+              id={"multiDiscountQty"}
+              value={multiDiscountQty}
+              onChangeText={(text) => setMultiDiscountQty(text)}
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            {/* <Text style={styles.inputText} >UPC: </Text> */}
+            <TextInput
+              style={styles.input}
+              placeholder="Multi Discount Price"
+              placeholderTextColor="#000000"
+              keyboardType="numeric"
+              autoCapitalize="none"
+              id={"multiDiscountPrice"}
+              value={multiDiscountPrice}
+              onChangeText={(text) => setMultiDiscountPrice(text)}
+            />
+          </View>
+
           <View style={styles.footer}>
             <View style={styles.outlinedText}>
               {error ? <ErrorRed message={error} /> : null}
             </View>
 
-            <TouchableOpacity style={styles.button2} onPress={() => handleCreateProduct()}>
+            <TouchableOpacity style={styles.button2} onPress={() => handleAddProduct()}>
               <Text style={styles.buttonText}>Confirm</Text>
             </TouchableOpacity>
           </View>

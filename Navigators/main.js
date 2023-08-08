@@ -74,7 +74,7 @@ const Main = (props) => {
           tabBarLabel: "User Profile", // Custom label for the tab
         }}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Admin"
         component={AdminPage}
         options={{
@@ -83,7 +83,7 @@ const Main = (props) => {
           ),
           tabBarLabel: 'Admin', // Custom label for the tab
         }}
-      /> */}
+      />
     </Tab.Navigator>
   );
 };

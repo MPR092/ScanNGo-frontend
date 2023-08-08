@@ -59,6 +59,11 @@ function MyStacks() {
             // If the user is logged in, show the main app screens
             <> */}
               <Stack.Screen
+                name="Login"
+                component={Login}
+                options={{ headerShown: false, title: "Login" }}
+              />
+              <Stack.Screen
                 name="Main"
                 component={Main}
                 options={{ headerShown: false }}
@@ -118,11 +123,11 @@ function MyStacks() {
                 options={{ headerShown: false, title: "ScanNGo" }}
               /> */}
               
-              <Stack.Screen
+              {/* <Stack.Screen
                 name="Login"
                 component={Login}
                 options={{ headerShown: false, title: "Login" }}
-              />
+              /> */}
               <Stack.Screen
                 name="Register"
                 component={Register}

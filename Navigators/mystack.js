@@ -66,7 +66,7 @@ function MyStacks() {
               <Stack.Screen
                 name="Main"
                 component={Main}
-                options={{ headerShown: false }}
+                options={{ headerShown: false, gestureEnabled: false }}
               />
               <Stack.Screen
                 name="Help"

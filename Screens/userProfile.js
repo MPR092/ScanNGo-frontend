@@ -73,7 +73,7 @@ const UserProfile = (props) => {
       });
 
       // Additional logout logic ( navigating to the login screen)
-      props.navigation.navigate("Cart");
+      // props.navigation.navigate("Cart");
       props.navigation.navigate("Login");
     } catch (error) {
       // Handle error if necessary

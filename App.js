@@ -6,6 +6,9 @@ import { NavigationContainer } from "@react-navigation/native"; //Navigation Sta
 import { Provider } from 'react-redux'
 import store from './Redux/store'
 
+//context Api
+// import Auth from './Context/store/Auth'
+
 // Toast Beautiful Messages
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 
@@ -36,6 +39,7 @@ export default function App() {
 
   return (
     <>
+    {/* <Auth> */}
       <Provider store={store}>
         <Stacks/>
         
@@ -44,6 +48,7 @@ export default function App() {
       <Toast />
       {/* <Toast ref={(ref) => Toast.setRef(ref)} /> */}
       </Provider>
+      {/* </Auth> */}
     </>
   );
 }

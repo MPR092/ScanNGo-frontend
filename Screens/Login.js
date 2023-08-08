@@ -88,9 +88,10 @@ const Login = (props, {navigation}) => {
             text2: `Welcome, ${res.data.USER.name}!`,
             // text3: "Try to scan barcodes to add them to the cart"
           })//toast
-
-          // navigation.navigate("ShoppingCart")
-          props.navigation.navigate('Main')
+          setTimeout(() => {
+            // navigation.navigate("ShoppingCart")
+            props.navigation.navigate('Main')
+          }, 500);
 
         })//then
         .catch(error => {

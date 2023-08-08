@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,23 +8,80 @@ import {
   SafeAreaView
 } from "react-native";
 
+//db connect
+import baseURL from '../../assets/common/BaseUrl'
+import axios from 'axios';
+
+//Toast Beautiful Messages
+import { Toast } from "react-native-toast-message/lib/src/Toast";
+
 //Get Redux State
 import { connect } from "react-redux";
 import * as actions from "../../Redux/Actions/cartActions";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const Confirm = (props) => {
+  const [token, setToken] = useState("");
+  
+  
+  useEffect(() => {
 
+    //get token
+    AsyncStorage.getItem('token')
+    .then((res) => {
+      setToken(res)
+    })
+    .catch((error) => console.log(error))
+  }, [])
+
+
+    const finalOrder = props.route.params;
     const confirmOrder = () => {
-        //server connect
-        console.log("Order Confirmed");
 
-        setTimeout( () => {
-            props.clearCart();
-            props.navigation.navigate('Cart');
-        }, 500)
+      //to append jwt token to the api
+    const config = {
+      headers: {
+        "Content-Type": "Application/JSON",
+        Authorization: `Bearer ${token}`
+      }
     }
 
-  const confirm = props.route.params;
+        //server connect
+        console.log("Order Confirmed");
+        const order = finalOrder.order;
+        // console.log(finalOrder)
+
+        axios
+        .post(`${baseURL}/orders/`, order, config)
+        .then((res) => {
+          // console.log(res);
+          if (res.status == 200 || res.status == 201) {
+            Toast.show({
+              topOffset: 60,
+              type: "success",
+              text1: "Order Completed",
+              text2: "",
+            });
+            setTimeout( () => {
+              props.clearCart();
+              props.navigation.navigate('Cart');
+          }, 500)
+          console.log("Product Upload Successfull");
+          }
+        })
+        .catch((error) => {
+          Toast.show({
+            topOffset: 60,
+            type: "error",
+            text1: "Something went wrong",
+            text2: "Please try again",
+          });
+        })
+        
+    }
+
+  // const confirm = props.route.params;
 //   console.log(confirm.order.orderItems[0]);
 
   //rendering data
@@ -71,7 +128,7 @@ const Confirm = (props) => {
           >
             <FlatList
               legacyImplementation="true"
-              data={confirm.order.orderItems}
+              data={finalOrder.order.orderItems}
               keyExtractor={(item, index) => index.toString()}
               renderItem={renderItem}
             />

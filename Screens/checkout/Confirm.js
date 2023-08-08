@@ -35,8 +35,11 @@ const Confirm = (props) => {
     .catch((error) => console.log(error))
   }, [])
 
-
     const finalOrder = props.route.params;
+    
+    const cardDetails = props.route.params;
+    console.log(cardDetails);
+
     const confirmOrder = () => {
 
       //to append jwt token to the api
@@ -115,6 +118,11 @@ const Confirm = (props) => {
         <Text style={styles.confirmText}>Confirm Order</Text>
       </View>
       {props.route.params ? (
+        <>
+        <View style={styles.container1}>
+        <Text style={styles.confirmCardCard}>Card:</Text>
+        <Text style={styles.confirmCard}>{finalOrder.card.number}</Text>
+      </View>
         <View style={styles.bodyView}>
           <Text style={styles.bodyItemsText}>Items:</Text>
           <View
@@ -134,6 +142,7 @@ const Confirm = (props) => {
             />
           </View>
         </View>
+        </>
       ) : null}
       <View style={styles.footer}>
           <TouchableOpacity style={styles.button2} onPress={() => confirmOrder()}>
@@ -152,8 +161,17 @@ const styles = StyleSheet.create({
     //   backgroundColor: "#b5babd",
   },
   container: {
-    flex: 0.5,
-    //   flexDirection: "column", // Display input fields in a column
+    flex: 1,
+    flexDirection: 'row', // Display input fields in a column
+    alignItems: "center",
+    justifyContent: "center",
+    // alignSelf: 'center,'
+    // padding: 20,
+    // backgroundColor: 'white',
+  },
+  container1: {
+    flex: 1,
+    flexDirection: 'row', // Display input fields in a column
     alignItems: "center",
     justifyContent: "center",
     // alignSelf: 'center,'
@@ -180,6 +198,18 @@ const styles = StyleSheet.create({
     // color: "#6342E8",
     fontSize: 20,
     fontWeight: "bold",
+    textAlign: "center",
+  },
+  confirmCardCard: {
+    // color: "#6342E8",
+    // fontSize: 20,
+    // fontWeight: "bold",
+    textAlign: "center",
+  },
+  confirmCard: {
+    color: "#6342E8",
+    // fontSize: 20,
+    // fontWeight: "bold",
     textAlign: "center",
   },
   button2: {

@@ -21,39 +21,11 @@ import Icon from "react-native-vector-icons/FontAwesome";
 // import Icon1 from "@expo/vector-icons/MaterialCommunityIcons";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-
-//Fetch user data from AsyncStorage
-// const fetchUSERData = async () => {
-//   try {
-//     const user = JSON.parse(await AsyncStorage.getItem("USER"));
-//     console.log("Fetched user data:", user);
-//     setUSER(user);
-//     setIsLoading(false);
-//     setLoading(false);
-//     // Set loading to false once data is fetched
-//   } catch (error) {
-//     console.error("Error fetching user data: ", error);
-//     // setIsLoading(false); // Set loading to false even if there's an error
-//   }
-// };
-
-// const checkuser = () => {
-//   const [USER, setUSER] = useState({});
-// }
-
-
 const UserProfile = (props) => {
-  const [USER, setUSER] = useState({});
+  const [USER, setUSER] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const [loading, setLoading] = useState(true);
-
-  // Sample user data
-  const userData = {
-    // name: "John Doe",
-    // email: "john.doe@example.com",
-    creditCard: "**** **** **** 1234",
-  };
 
   const handleLogout = async () => {
     // event.preventDefault();
@@ -83,22 +55,26 @@ const UserProfile = (props) => {
 
 
   useEffect(() => {
-    //Fetch user data from AsyncStorage
-    const fetchUSERData = async () => {
-      try {
-        const user = JSON.parse(await AsyncStorage.getItem("USER"));
-        // console.log("Fetched user data:", user);
-        setUSER(user);
-        setIsLoading(false);
-        setLoading(false);
-        // Set loading to false once data is fetched
-      } catch (error) {
-        console.error("Error fetching user data: ", error);
-        // setIsLoading(false); // Set loading to false even if there's an error
-      }
-    };
+   let unsubscribe=props.navigation.addListener("focus",async()=>{
+    const user = JSON.parse(await AsyncStorage.getItem("USER"));
+    // console.log("Fetched user data:", user);
+    setUSER(user);
+    setIsLoading(false);
+    setLoading(false);
+   })
 
-    fetchUSERData();
+   return unsubscribe;
+    // const fetchUSERData = async () => {
+    //   try {
+       
+    //     // Set loading to false once data is fetched
+    //   } catch (error) {
+    //     console.error("Error fetching user data: ", error);
+    //     // setIsLoading(false); // Set loading to false even if there's an error
+    //   }
+    // };
+
+    // fetchUSERData();
   }, []);
 
   // Show loading message while fetching data
@@ -109,7 +85,7 @@ const UserProfile = (props) => {
       </SafeAreaView>
     );
   }
-
+// console.log("USER",USER)
   return (
     <SafeAreaView style={styles.container}>
       {/* Profile Icon */}

@@ -37,8 +37,28 @@ import { useEffect } from "react";
 const Tab = createBottomTabNavigator();
 
 const Main = (props) => {
+  const [USER, setUSER] = useState(0);
   // const user = JSON.parse(await AsyncStorage.getItem('USER'));
   // console.log(user.isAdmin);
+  useEffect(() => {
+
+    //get token
+    AsyncStorage.getItem('USER')
+    .then((res) => {
+      console.log(res)
+      setUSER(JSON.parse(res))
+    })
+    .catch((error) => console.log(error))
+  }, [])
+  // [AsyncStorage.getItem('USER')]
+
+  if (USER) {
+    const IsAdmin = USER.isAdmin;
+  }
+  else {
+    const IsAdmin = false;
+  }
+  // console.log(IsAdmin);
 
   return (
     <Tab.Navigator
@@ -91,7 +111,7 @@ const Main = (props) => {
           tabBarLabel: "User Profile", // Custom label for the tab
         }}
       />
-      {/* { user.isAdmin ? ( */}
+      {/* { USER.isAdmin ? ( */}
         <Tab.Screen
           name="Admin"
           component={AdminPage}

@@ -68,8 +68,11 @@ const Payment = (props) => {
   //   props.navigation.navigate('Confirm');
   // };
 
+
   _onChange = (formData) => {
     console.log(JSON.stringify(formData, null, " "));
+    setCard(formData.values);
+    // console.log(card)
   };
 
   _onFocus = (field) => {
@@ -104,7 +107,7 @@ const Payment = (props) => {
           )}
         </View>
         <View style={styles.footer}>
-          <TouchableOpacity style={styles.button2} onPress={() => props.navigation.navigate('Confirm', { order }) }>
+          <TouchableOpacity style={styles.button2} onPress={() => props.navigation.navigate('Confirm', { order, card }) }>
             <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
       </View>

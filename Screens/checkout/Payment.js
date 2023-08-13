@@ -70,13 +70,13 @@ const Payment = (props) => {
 
 
   _onChange = (formData) => {
-    console.log(JSON.stringify(formData, null, " "));
+    // console.log(JSON.stringify(formData, null, " "));
     setCard(formData.values);
     // console.log(card)
   };
 
   _onFocus = (field) => {
-    console.log(field);
+    // console.log(field);
   };
 
   useEffect(() => {

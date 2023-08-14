@@ -100,7 +100,7 @@ const Payment = (props) => {
             <CreditCardInput
               requiresName
               requiresCVC
-              allowScroll
+              // allowScroll
               onChange={this._onChange}
               onFocus={this._onFocus}
             />

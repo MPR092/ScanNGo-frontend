@@ -33,6 +33,7 @@ import { LogBox } from "react-native";
 
 //Ignore all logs (warning)
 // LogBox.ignoreLogs(['ViewPropTypes will be removed']);
+// LogBox.ignoreLogs(['The Sound is already loaded']);
 // LogBox.ignoreAllLogs(true);
 
 export default function App() {

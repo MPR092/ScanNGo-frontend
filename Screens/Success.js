@@ -10,21 +10,6 @@ import { Toast } from "react-native-toast-message/lib/src/Toast";
 
 const Success = (props) => {
 
-  // const { totalP } = route.params;
-
-  // if ( totalP ) {
-
-
-    // Toast.show({
-    //   topOffset: 60,
-    //   type: "success",
-    //   text1: "Payment Successful",
-    //   text2: "Shop with us again"
-    // })
-
-
-  // }
-
   const handleContinue = async () => {
     // event.preventDefault();
     const USER = JSON.parse(await AsyncStorage.getItem('USER'));
@@ -35,16 +20,7 @@ const Success = (props) => {
       text2: "Try to scan the barcodes with the scanner"
     })
 
-    // console.log(`USER: ${USER}`);
-    // Toast.show({
-    //   topOffset: 60,
-    //   type: "success",
-    //   text1: "Login successful",
-    //   text2: `Welcome, ${res.data.USER.name}!`,
-    //   // text3: "Try to scan barcodes to add them to the cart"
-    // })//toast
-
-    props.navigation.navigate("Main")
+    props.navigation.navigate("Cart");
   }
 
   const handleLogout = async () => {

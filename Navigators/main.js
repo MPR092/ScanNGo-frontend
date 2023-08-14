@@ -38,40 +38,20 @@ const Tab = createBottomTabNavigator();
 
 const Main = (props) => {
   const [USER, setUSER] = useState(0);
-  // const user = JSON.parse(await AsyncStorage.getItem('USER'));
-  // console.log(user.isAdmin);
-  
-  
-  ////old useEffect
-  // useEffect(() => {
 
-  //   //get token
-  //   AsyncStorage.getItem('USER')
-  //   .then((res) => {
-  //     console.log(res)
-  //     setUSER(JSON.parse(res))
-  //   })
-  //   .catch((error) => console.log(error))
-  // }, [])
-  // [AsyncStorage.getItem('USER')]
-
-  // useEffect(() => {
-  //   let unsubscribe=props.navigation.addListener("focus",async()=>{
-  //    const user = JSON.parse(await AsyncStorage.getItem("USER"));
-  //    console.log("Fetched user data:", user);
-  //    setUSER(user);
-  //    setIsLoading(false);
-  //    setLoading(false);
-  //   })
+  // useEffect to get the user data
+  useEffect(() => {
+    let unsubscribe=props.navigation.addListener("focus",async()=>{
+     const user = JSON.parse(await AsyncStorage.getItem("USER"));
+     console.log("Fetched user data:", user);
+     setUSER(user);
+    })
  
-  //   return unsubscribe;
-  //  }, []);
+    return unsubscribe;
+   }, []);
 
-   
-  // if (USER.isAdmin === true) {
-  //   console.log(USER);
-  // }
-
+  // console.log(USER);
+  
   return (
     <Tab.Navigator
       screenOptions={{
@@ -122,7 +102,7 @@ const Main = (props) => {
           tabBarLabel: "User Profile", // Custom label for the tab
         }}
       />
-      {/* { USER.isAdmin ? ( */}
+      { USER.isAdmin ? (
         <Tab.Screen
           name="Admin"
           component={AdminPage}
@@ -133,7 +113,7 @@ const Main = (props) => {
             tabBarLabel: 'Admin', // Custom label for the tab
           }}
         />
-      {/* ) : null } */}
+      ) : null }
       
     </Tab.Navigator>
   );

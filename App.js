@@ -12,27 +12,14 @@ import store from './Redux/store'
 // Toast Beautiful Messages
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 
-// import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
-// Screens
-// import Login from "./Screens/Login";
-// import Register from "./Screens/Register";
-// import ShoppingCart from "./Screens/ShoppingCart";
-// import Success from "./Screens/Success";
-// import WelcomeIcon from "./Screens/WelcomeIcon";
-// import Help from "./Screens/Help";
-
 // Navigations
 import Stacks from './Navigators/mystack';
-
-//Bottom Tab Navigator
-// import Main from "./Navigators/main";
 
 //ignore the logging errors in runtime
 import { LogBox } from "react-native";
 
 //Ignore all logs (warning)
-// LogBox.ignoreLogs(['ViewPropTypes will be removed']);
+// LogBox.ignoreLogs(['ViewPropTypes will be removed']); (fixed)
 // LogBox.ignoreLogs(['The Sound is already loaded']);
 // LogBox.ignoreAllLogs(true);
 

@@ -8,11 +8,8 @@ import {
   SafeAreaView
 } from "react-native";
 
-//for pdf generation
-import PDFLib, { PDFDocument, PDFPage, PDFText, PDFImage } from 'react-native-pdf-lib';
-
 //for sending email
-import Mailer from 'react-native-mail';
+import emailjs from '@emailjs/browser';
 
 //db connect
 import baseURL from '../../assets/common/BaseUrl'
@@ -27,34 +24,87 @@ import * as actions from "../../Redux/Actions/cartActions";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-//Create Email Content
+// Create Email Content
 const generateEmailContent = (orderData, cardNumber) => {
-  // console.log("Data: ",orderData)
+  // Create a new Date object using the timestamp
+  const date = new Date(orderData.date);
+
+  // Format the date and time to English format
+  const options = { 
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    // timeZoneName: 'short'
+  };
+
+  const englishDateTime = date.toLocaleString('en-US', options);
+
+  // Helper function to calculate the total price
+  var total = 0;
+  var totalP = 0;
+  orderData.orderItems.forEach((cart) => {
+    return (total += cart.product.price);
+  });
+
+  const lastFourDigits = cardNumber.slice(-4);
+  const hiddenCardNumber = '*'.repeat(cardNumber.length - 4) + lastFourDigits;
+
+  //Total to 2 decimal
+  totalP = total.toFixed(2);
+
   const emailContent = `
-    <h1>ScanNGo</h1>
-    <h2>Order Receipt</h2>
-    <p>Card Number: **** **** **** ${cardNumber.slice(-4)}</p>
-    <h2>Items:</h2>
-    ${orderData.orderItems
-      .map(
-        (item) =>
-          `<p>Product: ${item.product.name}, Price: $${item.product.price}</p>`
-      )
-      .join('')}
+  <h4 style="font-family: Arial, sans-serif;">Thank you for shopping with us</h4>
+  <h3 style="font-family: Arial, sans-serif; text-align: center;">ScanNGo - Order Receipt</h3>
+  <p style="font-family: Arial, sans-serif;">Card Number: ${hiddenCardNumber}</p>
+  <p style="font-family: Arial, sans-serif;">Time: ${englishDateTime}</p>
+  <h2 style="font-family: Arial, sans-serif;">Cart Items:</h2>
+  <table style="font-family: Arial, sans-serif; border-collapse: collapse; width: 100%; border: 1px solid #ddd;">
+      <tr>
+          <th style="background-color: #f2f2f2; text-align: center; padding: 8px; font-family: Arial, sans-serif;">Product</th>
+          <th style="background-color: #f2f2f2; text-align: center; padding: 8px; font-family: Arial, sans-serif;">UPC</th>
+          <th style="background-color: #f2f2f2; text-align: center; padding: 8px; font-family: Arial, sans-serif;">Price</th>
+      </tr>
+      ${orderData.orderItems.map( (item) => `
+                  <tr>
+                      <td style="font-family: Arial, sans-serif; text-align: center; padding: 8px;">${item.product.name}</td>
+                      <td style="font-family: Arial, sans-serif; text-align: center; padding: 8px;">${item.product.upc}</td>
+                      <td style="font-family: Arial, sans-serif; text-align: center; padding: 8px;">$${item.product.price}</td>
+                  </tr>
+              `
+          ).join('')}
+      <tr>
+          <td style="font-family: Arial, sans-serif; text-align: center; padding: 8px;" colspan="2"><strong>Total</strong></td>
+          <td style="font-family: Arial, sans-serif; text-align: center; padding: 8px;"><strong>$ ${totalP}</strong></td>
+      </tr>
+  </table>
+  <h4 style="font-family: Arial, sans-serif;">Thank you for being our valued customer</h4>
   `;
   return emailContent;
 };
 
+//dump
+// ${orderData.orderItems.map( (item) => `<p>Product: ${item.product.name}, Price: $${item.product.price}</p>` ).join('')}
+
 //Send Email
-const sendEmail = (htmlContent) => {
+const sendEmail = async (toEmail, subject, htmlContent) => {
+  const publicKey = 'P8bYpwh0vZ9ebnBqh'; // Email.js User ID
+  const serviceID = 'service_d6owzon'; // Email.js service ID
+  const accessToken = 'OAodSWvF7AE99PAO-XNa2'; // Email.js access token
+
+  const emailData = {
+    from_name: 'ScanNGo',
+    to_email: toEmail,
+    subject: subject,
+    my_html: htmlContent,
+  };
+
   try {
-    Mailer.mail({
-      subject: 'ScanNGo Order Receipt',
-      recipients: ['pirzadahasan12@gmail.com'],
-      body: htmlContent,
-      isHTML: true,
-    });
-    console.log('Email sent successfully');
+    const response = await emailjs.send(serviceID, 'template_49lhkm6', emailData, publicKey, accessToken);
+    console.log('Email sent successfully:', response);
   } catch (error) {
     console.error('Error sending email:', error);
   }
@@ -109,10 +159,13 @@ const Confirm = (props) => {
               props.clearCart();
               props.navigation.navigate('Cart');
           }, 500)
-          console.log("Product Upload Successfull");
+          console.log("Order Upload Successfull");
+          // console.log("Final Order: ",finalOrder.order);
+          // console.log("Card Number: ",finalOrder.card.number);
+          
           //...
-          // const emailContent = generateEmailContent(finalOrder.order, finalOrder.card.number);
-          // sendEmail(emailContent);
+          const emailContent = generateEmailContent(finalOrder.order, finalOrder.card.number);
+          sendEmail('pirzadahasan98@gmail.com', 'Order Receipt ScanNGo', emailContent);
           //...
           }
         })
@@ -128,7 +181,7 @@ const Confirm = (props) => {
     }
 
   // const confirm = props.route.params;
-//   console.log(confirm.order.orderItems[0]);
+  // console.log(confirm.order.orderItems[0]);
 
   //rendering data
   const renderItem = ({ item }) => {

@@ -49,6 +49,16 @@ async function loadSounds() {
   }
 }
 
+// Unload sounds when the component unmounts
+async function unloadSounds() {
+  try {
+    await scannerSound.unloadAsync();
+    await errorSound.unloadAsync();
+  } catch (error) {
+    console.error('Error unloading sounds', error);
+  }
+}
+
 // Play beep sound with function call
 async function playBeepSound() {
   try {
@@ -115,6 +125,13 @@ const ShoppingCart = (props) => {
     loadSounds();
 
     getBarCodeScannerPermissions();
+  }, []);
+
+  // Unload sounds when the component unmounts
+  useEffect(() => {
+    return () => {
+      unloadSounds();
+    };
   }, []);
 
   //handlebarcode scan

@@ -86,9 +86,6 @@ const generateEmailContent = (orderData, cardNumber) => {
   return emailContent;
 };
 
-//dump
-// ${orderData.orderItems.map( (item) => `<p>Product: ${item.product.name}, Price: $${item.product.price}</p>` ).join('')}
-
 //Send Email
 const sendEmail = async (toEmail, subject, htmlContent) => {
   const publicKey = 'P8bYpwh0vZ9ebnBqh'; // Email.js User ID

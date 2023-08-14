@@ -39,6 +39,9 @@ const Payment = (props) => {
   //checkout state
   const [orderItems, setOrderItems] = useState();
 
+  // State to track the validity of the credit card form
+  const [isFormValid, setIsFormValid] = useState(false);
+
   const checkOut = () => {
     let order = {
       orderItems: props.cartItems,
@@ -73,6 +76,8 @@ const Payment = (props) => {
     // console.log(JSON.stringify(formData, null, " "));
     setCard(formData.values);
     // console.log(card)
+    // Check if the form is valid and set the state accordingly
+    setIsFormValid(formData.valid);
   };
 
   _onFocus = (field) => {
@@ -107,7 +112,18 @@ const Payment = (props) => {
           )}
         </View>
         <View style={styles.footer}>
-          <TouchableOpacity style={styles.button2} onPress={() => props.navigation.navigate('Confirm', { order, card }) }>
+          {/* <TouchableOpacity style={styles.button2} onPress={() => props.navigation.navigate('Confirm', { order, card }) }> */}
+          <TouchableOpacity
+          style={[
+            styles.button2,
+            { backgroundColor: isFormValid ? "#6342E8" : "#cccccc" }, // Change button color based on form validity
+          ]}
+          onPress={() =>
+            isFormValid &&
+            props.navigation.navigate("Confirm", { order, card })
+          }
+          disabled={!isFormValid} // Disable the button if the form is not valid
+        >
             <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
       </View>

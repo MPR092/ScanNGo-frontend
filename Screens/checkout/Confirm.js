@@ -146,7 +146,7 @@ const Confirm = (props) => {
     const finalOrder = props.route.params;
     
     const cardDetails = props.route.params;
-    console.log(cardDetails);
+    // console.log(cardDetails);
 
     const confirmOrder = async () => {
 

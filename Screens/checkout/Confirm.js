@@ -122,7 +122,11 @@ const sendEmail = async (toEmail, subject, htmlContent) => {
 const Confirm = (props) => {
   const [token, setToken] = useState("");
   const [USER, setUSER] = useState("");
+
+  //to disable button until info is available
+  const [cardDetailsAvailable, setCardDetailsAvailable] = useState(false);
   
+  // `useEffect` that fetches user data
   useEffect(() => {
     let unsubscribe=props.navigation.addListener("focus",async()=>{
      const user = JSON.parse(await AsyncStorage.getItem("USER"));
@@ -133,6 +137,7 @@ const Confirm = (props) => {
     return unsubscribe;
   }, []);
   
+  // `useEffect` that fetches user token
   useEffect(() => {
 
     //get token
@@ -147,6 +152,14 @@ const Confirm = (props) => {
     
     const cardDetails = props.route.params;
     // console.log(cardDetails);
+
+    // `useEffect` that checks card is available or not
+    useEffect(() => {
+      // Set the state to indicate the presence of cardDetails
+      if (finalOrder?.card) {
+        setCardDetailsAvailable(true);
+      }
+    }, [finalOrder?.card]);
 
     const confirmOrder = async () => {
 
@@ -263,7 +276,15 @@ const Confirm = (props) => {
         </>
       ) : null}
       <View style={styles.footer}>
-          <TouchableOpacity style={styles.button2} onPress={() => confirmOrder()}>
+          {/* <TouchableOpacity style={styles.button2} onPress={() => confirmOrder()}> */}
+          <TouchableOpacity
+            style={[
+              styles.button2,
+              { backgroundColor: !cardDetailsAvailable ? '#ccc' : '#6342E8' }, // Change background color based on cartItems length
+            ]}
+            onPress={() => confirmOrder()}
+            disabled={!cardDetailsAvailable} // Disable if cardDetails are not available
+          >
             <Text style={styles.buttonText}>Confirm</Text>
           </TouchableOpacity>
       </View>

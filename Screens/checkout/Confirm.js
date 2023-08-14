@@ -176,7 +176,8 @@ const Confirm = (props) => {
             });
             setTimeout( () => {
               props.clearCart();
-              props.navigation.navigate('Cart');
+              // props.navigation.navigate('Cart');
+              props.navigation.navigate('Success');
           }, 500)
           console.log("Order Upload Successfull");
           // console.log("Final Order: ",finalOrder.order);

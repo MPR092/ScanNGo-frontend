@@ -61,7 +61,7 @@ const generateEmailContent = (orderData, cardNumber) => {
   <h3 style="font-family: Arial, sans-serif; text-align: center;">ScanNGo - Order Receipt</h3>
   <p style="font-family: Arial, sans-serif;">Card Number: ${hiddenCardNumber}</p>
   <p style="font-family: Arial, sans-serif;">Time: ${englishDateTime}</p>
-  <h2 style="font-family: Arial, sans-serif;">Cart Items:</h2>
+  <h4 style="font-family: Arial, sans-serif; text-align: center; ">Order Items:</h4>
   <table style="font-family: Arial, sans-serif; border-collapse: collapse; width: 100%; border: 1px solid #ddd;">
       <tr>
           <th style="background-color: #f2f2f2; text-align: center; padding: 8px; font-family: Arial, sans-serif;">Product</th>
@@ -78,7 +78,7 @@ const generateEmailContent = (orderData, cardNumber) => {
           ).join('')}
       <tr>
           <td style="font-family: Arial, sans-serif; text-align: center; padding: 8px;" colspan="2"><strong>Total</strong></td>
-          <td style="font-family: Arial, sans-serif; text-align: center; padding: 8px;"><strong>$ ${totalP}</strong></td>
+          <td style="font-family: Arial, sans-serif; text-align: center; padding: 8px;"><strong>$${totalP}</strong></td>
       </tr>
   </table>
   <h4 style="font-family: Arial, sans-serif;">Thank you for being our valued customer</h4>
@@ -102,14 +102,36 @@ const sendEmail = async (toEmail, subject, htmlContent) => {
   try {
     const response = await emailjs.send(serviceID, 'template_49lhkm6', emailData, publicKey, accessToken);
     console.log('Email sent successfully:', response);
+    Toast.show({
+      topOffset: 60,
+      type: "success",
+      text1: "Receipt sent to your email",
+      text2: "Check your email inbox",
+    });
   } catch (error) {
     console.error('Error sending email:', error);
+    Toast.show({
+      topOffset: 60,
+      type: "error",
+      text1: "Error sending email!",
+      text2: `${error}`,
+    });
   }
 };
 
 const Confirm = (props) => {
   const [token, setToken] = useState("");
+  const [USER, setUSER] = useState("");
   
+  useEffect(() => {
+    let unsubscribe=props.navigation.addListener("focus",async()=>{
+     const user = JSON.parse(await AsyncStorage.getItem("USER"));
+     // console.log("Fetched user data:", user);
+     setUSER(user);
+    })
+ 
+    return unsubscribe;
+  }, []);
   
   useEffect(() => {
 
@@ -162,7 +184,9 @@ const Confirm = (props) => {
           
           //...
           const emailContent = generateEmailContent(finalOrder.order, finalOrder.card.number);
-          sendEmail('pirzadahasan98@gmail.com', 'Order Receipt ScanNGo', emailContent);
+          // sendEmail('pirzadahasan98@gmail.com', 'Order Receipt ScanNGo', emailContent);
+          // console.log("Email: ", USER.email);
+          sendEmail(`${USER?.email}`, 'Order Receipt ScanNGo', emailContent);
           //...
           }
         })
@@ -203,7 +227,7 @@ const Confirm = (props) => {
       </View>
     </View>
     )
-}
+  }
 
   return (
     <SafeAreaView style={styles.structure}>

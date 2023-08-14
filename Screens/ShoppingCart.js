@@ -352,11 +352,22 @@ const ShoppingCart = (props) => {
           </View>
         </View>
 
-        <TouchableOpacity
+        
+        {/* <TouchableOpacity
           style={styles.button2}
           onPress={() => props.navigation.navigate('Checkout')}
+        > */}
+
+        {/* Disable the checkout button when cart is empty */}
+        <TouchableOpacity
+          style={[
+            styles.button2,
+            { backgroundColor: props.cartItems.length === 0 ? '#ccc' : '#6342E8' }, // Change background color based on cartItems length
+          ]}
+          onPress={() => props.cartItems.length > 0 && props.navigation.navigate('Checkout')} // Only navigate if cart is not empty
+          disabled={props.cartItems.length === 0} // Disable the button if cart is empty
         >
-          {/* <Text style={styles.buttonText}>Checkout $ {totalP}</Text> */}
+
           <Text style={styles.buttonText}>Checkout (${totalP})</Text>
         </TouchableOpacity>
       </View>

@@ -73,11 +73,11 @@ function MyStacks() {
                 component={Help}
                 options={{ headerShown: false, title: "Help" }}
               />
-              {/* <Stack.Screen
+              <Stack.Screen
                 name="Success"
                 component={Success}
-                options={{ headerShown: true, title: "Checkout" }}
-              /> */}
+                options={{ headerShown: false, title: "Success" }}
+              />
               <Stack.Screen
                 name="Checkout"
                 component={CheckoutNavigator}

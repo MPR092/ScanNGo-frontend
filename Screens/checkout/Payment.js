@@ -14,6 +14,7 @@ import {
 import { LogBox } from "react-native";
 
 //Ignore all logs (warning)
+// These are bugs from the library and not yet solved
 LogBox.ignoreLogs(['ABI49_0_0RCTUIManager.measureLayoutRelativeToParent method is deprecated and it will not be implemented in newer versions of ABI49_0_0RN (Fabric) - T47686450']);
 LogBox.ignoreLogs(['fontFamily "Courier" is not a system font and has not been loaded through Font.loadAsync.']);
 LogBox.ignoreLogs(['Failed prop type: CCInput']);

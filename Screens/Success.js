@@ -20,7 +20,7 @@ const Success = (props) => {
       text2: "Try to scan the barcodes with the scanner"
     })
 
-    props.navigation.navigate("Cart");
+    props.navigation.navigate("Main");
   }
 
   const handleLogout = async () => {

@@ -43,7 +43,7 @@ const Main = (props) => {
   useEffect(() => {
     let unsubscribe=props.navigation.addListener("focus",async()=>{
      const user = JSON.parse(await AsyncStorage.getItem("USER"));
-     console.log("Fetched user data:", user);
+    //  console.log("Fetched user data:", user);
      setUSER(user);
     })
  

@@ -25,8 +25,8 @@ Grant permissions to the expo app for the camera access
 # ***IMP***
 Change front end baseurl first
 
--> You can get the baseurl in assets/common/baseurl.js
--> Change the ip for your device os (example shown below)
+- You can get the baseurl in assets/common/baseurl.js
+- Change the ip for your device os (example shown below)
 
 ### Example: 
 

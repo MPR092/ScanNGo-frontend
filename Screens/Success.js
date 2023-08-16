@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     left: 49,
   },
   thankYou: {
-    top: 450,
+    top: 500,
     // left: 91,
     color: Color.gray,
     textAlign: "center",

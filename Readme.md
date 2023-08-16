@@ -18,9 +18,9 @@ Step 2:  npm start //Run the frontend host
 
 Step 3:  Scan the qr with expo go app on a mobile device  //Running the front end on a device
 
-Note: Use device that has a working camera
-
-Grant permissions to the expo app for the camera access 
+##  Notes: 
+- Use device that has a working camera
+- Grant permissions to the expo app for the camera access 
 
 # ***IMP***
 Change front end baseurl first
@@ -30,16 +30,16 @@ Change front end baseurl first
 
 ### Example: 
 
-ipv4: 142.3.83.67
-
+if ipv4: 142.3.83.67
 Then baseurl link will be:
-
 Old: "http://142.3.83.67:3000/api/v1/"
 
-Change it to your ipv4 url: "http://( replace with your ipv4 here ):3000/api/v1/"
+Change it to your ipv4 url
+update to: "http://( replace with your ipv4 here ):3000/api/v1/"
 
 You can find ip Through running :
-### start > run > cmd type ipconfig
+- ### start > run > cmd 
+- ### type ipconfig
 
 
 ### Mobile Device Last Tested:

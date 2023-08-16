@@ -43,8 +43,8 @@ You can find ip Through running :
 
 
 ### Mobile Device Last Tested:
-***Model: iPhone 13 Pro***
-***OS: iOS - 16.6***
-***Expo Client Version: 1017549***
+- ***Model: iPhone 13 Pro***
+- ***OS: iOS - 16.6***
+- ***Expo Client Version: 1017549***
 
 #### errors and warnings shown (hidden from the device now) are because of the third party package (react-native-credit-card-input) and can be ignored

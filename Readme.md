@@ -48,3 +48,11 @@ You can find ip Through running :
 - ***Expo Client Version: 1017549***
 
 #### errors and warnings shown (hidden from the device now) are because of the third party package (react-native-credit-card-input) and can be ignored
+
+-----------------------------------------------------------------------------------------
+
+Copyright © 2023 Mehmoodul Hasan Pirzada. All Rights Reserved.
+
+Permission is not granted to copy, modify, or distribute this software or its components without prior written consent from the author.
+
+For inquiries, contact: pirzadahasan12@gmail.com
